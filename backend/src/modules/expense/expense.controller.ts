@@ -6,13 +6,23 @@ import {
   updateExpenseSchema,
 } from "../../zod/expense.schema.js";
 import { idSchema } from "../../zod/id.schema.js";
+import { querySchema } from "../../zod/query.schema.js";
 
 export async function getHandler(req: AuthRequest, res: Response) {
   try {
-    const result = await expenseService.getExpenses();
+    const validation = querySchema.safeParse(req.query);
 
+    if (!validation.success) {
+      return res.status(400).json({
+        error: "validation failed",
+        details: validation.error.flatten().fieldErrors,
+      });
+    }
+
+    const result = await expenseService.getExpenses(validation.data);
     return res.status(200).json({
-      data: result,
+      data: result.expenses,
+      pagination: result.pagination,
     });
   } catch (error) {
     console.log(error);

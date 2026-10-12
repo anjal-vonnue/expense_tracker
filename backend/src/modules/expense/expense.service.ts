@@ -1,13 +1,57 @@
+import type { Prisma } from "../../generated/prisma/client.js";
 import prisma from "../../prisma/connection.js";
 import type {
   expenseSchemaInput,
   updateSchemaInput,
 } from "../../zod/expense.schema.js";
+import type { querySchemaType } from "../../zod/query.schema.js";
 
-export async function getExpenses() {
-  const expenses = await prisma.expense.findMany();
+export async function getExpenses(query: querySchemaType) {
+  const where: Prisma.ExpenseWhereInput = {
+    ...(query.search && {
+      OR: [
+        {
+          title: {
+            contains: query.search,
+            mode: "insensitive",
+          },
+        },
+        {
+          notes: {
+            contains: query.search,
+            mode: "insensitive",
+          },
+        },
+      ],
+    }),
+    ...(query.category && {
+      category: query.category,
+    }),
+  };
 
-  return expenses;
+  const skip = (query.page - 1) * query.pageSize;
+
+  const total = await prisma.expense.count({
+    where,
+  });
+
+  const expenses = await prisma.expense.findMany({
+    where,
+    skip,
+    take: query.pageSize,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  const pagination = {
+    page: query.page,
+    pageSize: query.pageSize,
+    total,
+    totalPages: Math.ceil(total / query.pageSize),
+  };
+
+  return { expenses, pagination };
 }
 
 export async function getExpenseById(id: number) {
