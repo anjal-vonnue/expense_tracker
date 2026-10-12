@@ -4,6 +4,7 @@ import * as expenseService from "./expense.service.js";
 import { Result } from "pg";
 import { expenseSchema } from "../../zod/expense.schema.js";
 import { error } from "node:console";
+import { idSchema } from "../../zod/id.schema.js";
 
 export async function getHandler(req: AuthRequest, res: Response) {
   try {
@@ -67,8 +68,23 @@ export async function deleteHandler(req: AuthRequest, res: Response) {
 
 export async function getByIdHandler(req: AuthRequest, res: Response) {
   try {
+    const validation = idSchema.safeParse(req.params.id);
+
+    if (!validation.success) {
+      return res.status(400).json({
+        error: "validation error",
+        details: validation.error.flatten().formErrors,
+      });
+    }
+    const result = await expenseService.getExpenseById(validation.data);
+
+    return res.status(200).json({ data: result });
   } catch (error) {
     console.log(error);
+    if (error instanceof Error && error.message === "NOT_FOUND") {
+      return res.status(404).json({ error: "not found" });
+    }
+
     return res.status(500).json({ error: "internal server error" });
   }
 }

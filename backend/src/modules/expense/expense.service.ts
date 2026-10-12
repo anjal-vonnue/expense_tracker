@@ -16,7 +16,19 @@ export async function getExpenses() {
   return expenses;
 }
 
-export async function getExpenseById() {}
+export async function getExpenseById(id: number) {
+  const expense = await prisma.expense.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!expense) {
+    throw new Error("NOT_FOUND");
+  }
+
+  return expense;
+}
 
 export async function createExpense(
   expense: expenseSchemaInput,
