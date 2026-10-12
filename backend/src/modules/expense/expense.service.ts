@@ -52,4 +52,16 @@ export async function createExpense(
 
 export async function updateExpense() {}
 
-export async function deleteExpense() {}
+export async function deleteExpense(id: number) {
+  const expense = await prisma.expense.findUnique({ where: { id } });
+
+  if (!expense) {
+    throw new Error("NOT_FOUND");
+  }
+
+  const deletedExpense = await prisma.expense.delete({
+    where: { id: expense.id },
+  });
+
+  return deletedExpense;
+}
