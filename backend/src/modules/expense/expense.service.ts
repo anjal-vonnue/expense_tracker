@@ -1,14 +1,8 @@
-import { CategoryType } from "../../generated/prisma/enums.js";
 import prisma from "../../prisma/connection.js";
-import type { expenseSchemaInput } from "../../zod/expense.schema.js";
-
-type Expense = {
-  title: string;
-  amount: string;
-  category: string;
-  expenseDate: string;
-  notes?: string;
-};
+import type {
+  expenseSchemaInput,
+  updateSchemaInput,
+} from "../../zod/expense.schema.js";
 
 export async function getExpenses() {
   const expenses = await prisma.expense.findMany();
@@ -50,7 +44,39 @@ export async function createExpense(
   return newExpense;
 }
 
-export async function updateExpense() {}
+export async function updateExpense(
+  expense: updateSchemaInput,
+  userId: number,
+  expenseId: number,
+) {
+  const expenseFound = await prisma.expense.findFirst({
+    where: {
+      id: expenseId,
+      userId,
+    },
+  });
+
+  if (!expenseFound) {
+    throw new Error("NOT_FOUND");
+  }
+
+  const updatedExpense = await prisma.expense.update({
+    where: {
+      id: expenseFound.id,
+    },
+    data: {
+      ...(expense.title && { title: expense.title }),
+      ...(expense.amount && { amount: expense.amount }),
+      ...(expense.category && { category: expense.category }),
+      ...(expense.notes && { notes: expense.notes }),
+      ...(expense.expenseDate && {
+        expenseDate: new Date(expense.expenseDate),
+      }),
+    },
+  });
+
+  return updatedExpense;
+}
 
 export async function deleteExpense(id: number) {
   const expense = await prisma.expense.findUnique({ where: { id } });
