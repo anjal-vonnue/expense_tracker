@@ -11,22 +11,33 @@ import { ArrowLeftRight, TrendingUp } from "lucide-react";
 
 const TotalTransactions = () => {
   return (
-    <Card className="aspect-video bg-blue-100">
+    <Card className="flex aspect-video flex-col bg-blue-50">
       <CardHeader>
-        <CardTitle>Total Transactions</CardTitle>
-        <CardDescription>
-          this is your expensese for the recent month
+        <CardTitle className="text-lg font-semibold text-blue-950">
+          Total Transactions
+        </CardTitle>
+
+        <CardDescription className="text-blue-800/70">
+          Transactions for the current month
         </CardDescription>
+
         <CardAction>
-          <ArrowLeftRight />
+          <div className="bg-blue-100 p-2 text-blue-700">
+            <ArrowLeftRight className="h-10 w-10" />
+          </div>
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <h1 className="text-5xl font-bold">18</h1>
+
+      <CardContent className="flex-1">
+        <h1 className="text-4xl font-bold tracking-tight text-blue-950">18</h1>
+        <p className="mt-1 text-sm text-blue-800/70">
+          Total transactions this month
+        </p>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <TrendingUp />
-        12% from last month
+
+      <CardFooter className="mt-auto flex items-center gap-2 border-t border-blue-200 pt-4 text-sm text-blue-700">
+        <TrendingUp className="h-4 w-4" />
+        <span className="font-medium">12% from last month</span>
       </CardFooter>
     </Card>
   );
