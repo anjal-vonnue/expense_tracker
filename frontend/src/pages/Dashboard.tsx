@@ -1,6 +1,6 @@
 import HighestCategory from "@/components/page/HighestCategory";
 import RecentTransaction from "@/components/page/RecentTransaction";
-import SpendingCategory from "@/components/page/SpendingCategory";
+import { SpendingCategory } from "@/components/page/SpendingCategory";
 import { TotalExpenses } from "@/components/page/TotalExpenses";
 import TotalTransactions from "@/components/page/TotalTransactions";
 
