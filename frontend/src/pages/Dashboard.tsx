@@ -1,4 +1,6 @@
 import HighestCategory from "@/components/page/HighestCategory";
+import RecentTransaction from "@/components/page/RecentTransaction";
+import SpendingCategory from "@/components/page/SpendingCategory";
 import { TotalExpenses } from "@/components/page/TotalExpenses";
 import TotalTransactions from "@/components/page/TotalTransactions";
 
@@ -10,7 +12,10 @@ const Dashboard = () => {
         <TotalTransactions />
         <HighestCategory />
       </div>
-      <div className="min-h-screen flex-1 bg-muted/50 md:min-h-min" />
+      <div className="min-h-screen flex-1 md:min-h-min flex flex-col md:flex-row gap-4 ">
+        <SpendingCategory />
+        <RecentTransaction />
+      </div>
     </div>
   );
 };
