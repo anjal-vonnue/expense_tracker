@@ -3,7 +3,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  //   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -11,12 +10,12 @@ import { Button } from "../ui/button";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Pencil, Trash } from "lucide-react";
 import { Link } from "react-router";
 
 const expenses = [
@@ -76,20 +75,20 @@ const expenses = [
     amount: 1200.0,
     date: "2026-10-05",
   },
-  //   {
-  //     id: 9,
-  //     title: "Headphones",
-  //     category: "Shopping",
-  //     amount: 1999.0,
-  //     date: "2026-10-04",
-  //   },
-  //   {
-  //     id: 10,
-  //     title: "Stationery",
-  //     category: "Others",
-  //     amount: 320.0,
-  //     date: "2026-10-03",
-  //   },
+  {
+    id: 9,
+    title: "Headphones",
+    category: "Shopping",
+    amount: 1999.0,
+    date: "2026-10-04",
+  },
+  {
+    id: 10,
+    title: "Stationery",
+    category: "Others",
+    amount: 320.0,
+    date: "2026-10-03",
+  },
 ];
 
 const RecentTransaction = () => {
@@ -109,7 +108,6 @@ const RecentTransaction = () => {
         </CardAction>
       </CardHeader>
       <CardContent>
-        {/* <h1 className="text-5xl font-bold">12,480</h1> */}
         <div className="h-full overflow-y-auto">
           <Table>
             <TableHeader>
@@ -119,11 +117,10 @@ const RecentTransaction = () => {
               <TableHead className="text-right">Category</TableHead>
               <TableHead className="text-right">Amount</TableHead>
               <TableHead className="text-right">Date</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
             </TableHeader>
             <TableBody>
               {expenses.map((expense) => (
-                <TableRow key={expense.id}>
+                <TableRow key={expense.id} className="">
                   <TableCell className="font-medium">{expense.title}</TableCell>
                   <TableCell className="text-right">
                     {expense.category}
@@ -135,25 +132,13 @@ const RecentTransaction = () => {
                     })}
                   </TableCell>
                   <TableCell className="text-right">{expense.date}</TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="outline" size="icon">
-                      <Pencil />
-                    </Button>
-                    <Button variant="destructive" size="icon">
-                      <Trash />
-                    </Button>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
-        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+        <TableCaption>A list of your recent expenses.</TableCaption>
       </CardContent>
-      {/* <CardFooter className="flex-col gap-2">
-        <TrendingUp />
-        12% from last month
-      </CardFooter> */}
     </Card>
   );
 };
