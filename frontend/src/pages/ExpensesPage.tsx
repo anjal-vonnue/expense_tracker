@@ -1,3 +1,4 @@
+import DeleteDialog from "@/components/DeleteDialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 const expenses = [
   {
@@ -178,21 +179,14 @@ const ExpensesPage = () => {
                     <Button variant="outline" size="icon">
                       <Pencil />
                     </Button>
-                    <Button variant="destructive" size="icon">
-                      <Trash />
-                    </Button>
+                    <DeleteDialog expenseId={expense.id} />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
-        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
       </CardContent>
-      {/* <CardFooter className="flex-col gap-2">
-        <TrendingUp />
-        12% from last month
-      </CardFooter> */}
     </Card>
   );
 };
