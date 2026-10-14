@@ -43,7 +43,6 @@ const EditDialog = ({ id, title, category, amount, date }: EditDialogProps) => {
   const [editCategory, setEditCategory] = useState<string>(category);
   const [editAmount, setEditAmount] = useState<number>(amount);
   const [editDate, setEditDate] = useState<CalendarDate>(parseDate(date));
-  const [isOpen, setIsOpen] = useState(false);
 
   const resetForm = () => {
     setEditTitle(title);
@@ -51,8 +50,6 @@ const EditDialog = ({ id, title, category, amount, date }: EditDialogProps) => {
     setEditAmount(amount);
     setEditDate(parseDate(date));
   };
-
-  console.log(id + " isOpen: " + isOpen);
 
   const categories = [
     { label: "Food", value: "food" },
@@ -78,9 +75,6 @@ const EditDialog = ({ id, title, category, amount, date }: EditDialogProps) => {
   return (
     <DialogTrigger
       onOpenChange={(open) => {
-        setIsOpen(open);
-        console.log("open: ", open);
-
         if (open) {
           resetForm();
         }
