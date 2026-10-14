@@ -6,8 +6,9 @@ import type {
 } from "../../zod/expense.schema.js";
 import type { querySchemaType } from "../../zod/query.schema.js";
 
-export async function getExpenses(query: querySchemaType) {
+export async function getExpenses(query: querySchemaType, userId: number) {
   const where: Prisma.ExpenseWhereInput = {
+    userId: userId,
     ...(query.search && {
       OR: [
         {
@@ -40,7 +41,7 @@ export async function getExpenses(query: querySchemaType) {
     skip,
     take: query.pageSize,
     orderBy: {
-      createdAt: "desc",
+      expenseDate: "desc",
     },
   });
 
@@ -54,10 +55,11 @@ export async function getExpenses(query: querySchemaType) {
   return { expenses, pagination };
 }
 
-export async function getExpenseById(id: number) {
+export async function getExpenseById(id: number, userId: number) {
   const expense = await prisma.expense.findUnique({
     where: {
       id,
+      userId,
     },
   });
 

@@ -19,7 +19,10 @@ export async function getHandler(req: AuthRequest, res: Response) {
       });
     }
 
-    const result = await expenseService.getExpenses(validation.data);
+    const result = await expenseService.getExpenses(
+      validation.data,
+      Number(req.userId),
+    );
     return res.status(200).json({
       data: result.expenses,
       pagination: result.pagination,
@@ -133,7 +136,10 @@ export async function getByIdHandler(req: AuthRequest, res: Response) {
         details: validation.error.flatten().formErrors,
       });
     }
-    const result = await expenseService.getExpenseById(validation.data);
+    const result = await expenseService.getExpenseById(
+      validation.data,
+      Number(req.userId),
+    );
 
     return res.status(200).json({ data: result });
   } catch (error) {
