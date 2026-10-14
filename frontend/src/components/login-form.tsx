@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
 import { useState } from "react";
+import { useExpense } from "@/context/ExpenseContext";
 
 export function LoginForm({
   className,
@@ -24,6 +25,8 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const { login } = useExpense();
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -34,6 +37,8 @@ export function LoginForm({
     };
 
     console.log("loginData: ", data);
+
+    login(data.email, data.password);
   };
 
   return (

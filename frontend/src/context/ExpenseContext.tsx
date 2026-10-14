@@ -40,7 +40,9 @@ export function ExpenseProvider({ children }: { children: React.ReactNode }) {
   async function login(email: string, password: string) {
     const data = await loginApi(email, password);
 
-    localStorage.setItem("expense-user", JSON.stringify(data.user));
+    console.log(data);
+
+    localStorage.setItem("expense-user", JSON.stringify(data.data));
     localStorage.setItem("expense-token", data.token);
   }
 

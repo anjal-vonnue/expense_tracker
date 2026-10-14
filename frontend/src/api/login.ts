@@ -1,7 +1,7 @@
 import type { User } from "@/context/ExpenseContext";
 
 export type LoginResponse = {
-  user: User;
+  data: User;
   token: string;
 };
 
