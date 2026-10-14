@@ -1,5 +1,5 @@
 import DeleteDialog from "@/components/DeleteDialog";
-import { Button } from "@/components/ui/button";
+import EditDialog from "@/components/EditDialog";
 import {
   Card,
   CardContent,
@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil } from "lucide-react";
 
 const expenses = [
   {
@@ -175,10 +174,14 @@ const ExpensesPage = () => {
                     })}
                   </TableCell>
                   <TableCell className="text-right">{expense.date}</TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="outline" size="icon">
-                      <Pencil />
-                    </Button>
+                  <TableCell className="flex justify-end ">
+                    <EditDialog
+                      id={expense.id}
+                      title={expense.title}
+                      category={expense.category}
+                      amount={expense.amount}
+                      date={expense.date}
+                    />
                     <DeleteDialog expenseId={expense.id} />
                   </TableCell>
                 </TableRow>
