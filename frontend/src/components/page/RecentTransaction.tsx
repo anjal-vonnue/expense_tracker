@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const expenses = [
   {
@@ -92,6 +92,8 @@ const expenses = [
 ];
 
 const RecentTransaction = () => {
+  const navigate = useNavigate();
+
   return (
     <Card className="w-full  bg-muted/50">
       <CardHeader>
@@ -101,10 +103,7 @@ const RecentTransaction = () => {
         </CardDescription>
         <CardAction>
           {" "}
-          <Button>
-            {" "}
-            <Link to={"/expenses"}>View all</Link>
-          </Button>
+          <Button onClick={() => navigate("/expenses")}> View all</Button>
         </CardAction>
       </CardHeader>
       <CardContent>
