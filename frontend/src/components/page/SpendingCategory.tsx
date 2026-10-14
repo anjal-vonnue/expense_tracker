@@ -18,8 +18,16 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 
+type SpendingCategory =
+  | "food"
+  | "transport"
+  | "shopping"
+  | "bills"
+  | "entertainment"
+  | "others";
+
 type ChartData = {
-  category: string;
+  category: SpendingCategory;
   spend: number;
   fill: string;
 };

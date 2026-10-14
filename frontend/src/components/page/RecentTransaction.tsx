@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const expenses = [
   {
