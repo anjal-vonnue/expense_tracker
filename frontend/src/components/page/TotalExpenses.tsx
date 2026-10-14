@@ -12,7 +12,7 @@ import { TrendingUp, Wallet } from "lucide-react";
 
 export const TotalExpenses = () => {
   return (
-    <Card className="flex aspect-video flex-col bg-green-50">
+    <Card className="flex lg:aspect-video flex-col bg-green-50 md:h-80 w-full">
       <CardHeader className="relative">
         <CardTitle className="text-lg font-semibold text-green-950">
           Total Expenses

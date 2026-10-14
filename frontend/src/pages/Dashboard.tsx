@@ -7,12 +7,12 @@ import TotalTransactions from "@/components/page/TotalTransactions";
 const Dashboard = () => {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+      <div className="grid auto-rows-min gap-4 lg:grid-cols-3">
         <TotalExpenses />
         <TotalTransactions />
         <HighestCategory />
       </div>
-      <div className="min-h-screen flex-1 md:min-h-min flex flex-col md:flex-row gap-4 ">
+      <div className="min-h-screen flex-1 md:min-h-min flex flex-col lg:flex-row gap-4 ">
         <SpendingCategory />
         <RecentTransaction />
       </div>

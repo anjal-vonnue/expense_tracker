@@ -11,7 +11,7 @@ import { ChartNoAxesCombined, TrendingUp } from "lucide-react";
 
 const HighestCategory = () => {
   return (
-    <Card className="flex aspect-video flex-col bg-purple-50">
+    <Card className="flex lg:aspect-video flex-col bg-purple-50 md:h-80 w-full">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-purple-950">
           Highest Category

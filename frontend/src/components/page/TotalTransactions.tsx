@@ -11,7 +11,7 @@ import { ArrowLeftRight, TrendingUp } from "lucide-react";
 
 const TotalTransactions = () => {
   return (
-    <Card className="flex aspect-video flex-col bg-blue-50">
+    <Card className="flex lg:aspect-video flex-col bg-blue-50 md:h-80 w-full">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-blue-950">
           Total Transactions
