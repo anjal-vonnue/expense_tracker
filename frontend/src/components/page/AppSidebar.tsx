@@ -7,12 +7,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useExpense } from "@/context/ExpenseContext";
 
 import { CirclePlus, HandCoins, LayoutDashboard, User2 } from "lucide-react";
 
 import { Link } from "react-router";
 
 const AppSidebar = () => {
+  const { user } = useExpense();
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -64,7 +67,7 @@ const AppSidebar = () => {
                 className="flex w-full items-center gap-2 px-2 py-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               >
                 <User2 />
-                <span>Username</span>
+                <span>{user?.name}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
