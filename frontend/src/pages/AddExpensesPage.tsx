@@ -53,7 +53,7 @@ const AddExpensesPage = () => {
   };
 
   return (
-    <Card className="flex h-full">
+    <Card className="flex h-full bg-muted/50">
       <CardHeader className="flex flex-col justify-center items-center">
         <CardTitle>Add Expenses</CardTitle>
         <CardDescription className="text-center">
@@ -74,6 +74,7 @@ const AddExpensesPage = () => {
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
+                className="bg-white"
               />
             </Field>
             <Field>
@@ -87,6 +88,7 @@ const AddExpensesPage = () => {
                 onChange={(e) => {
                   setAmount(e.target.value);
                 }}
+                className="bg-white"
               />
             </Field>
             <Field>
@@ -95,7 +97,7 @@ const AddExpensesPage = () => {
               <Select
                 id="expense-category"
                 placeholder="Select a fruit"
-                className="w-full"
+                className="bg-white w-full"
                 value={category}
                 onChange={(value) => {
                   if (typeof value === "string") {
