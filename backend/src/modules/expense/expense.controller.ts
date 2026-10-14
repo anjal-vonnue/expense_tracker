@@ -157,7 +157,7 @@ export async function filterByDateHandler(req: AuthRequest, res: Response) {
   try {
     console.log("hello");
 
-    const validation = filterDateSchema.safeParse(req.body);
+    const validation = filterDateSchema.safeParse(req.query);
 
     if (!validation.success) {
       return res.status(400).json({
@@ -167,11 +167,11 @@ export async function filterByDateHandler(req: AuthRequest, res: Response) {
     }
 
     const result = await expenseService.filterExpense(
-      req.body,
+      validation.data,
       Number(req.userId),
     );
 
-    return res.status(200).json({ date: result });
+    return res.status(200).json({ data: result });
   } catch (error) {
     console.log(error);
 
