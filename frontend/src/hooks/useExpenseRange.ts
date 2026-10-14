@@ -7,6 +7,8 @@ export const useExpenseRange = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [total, setTotal] = useState<number>(0);
+  const [transactionCount, setTransactionCount] = useState<number>(0);
   const { token } = useExpense();
 
   useEffect(() => {
@@ -66,11 +68,24 @@ export const useExpenseRange = () => {
     if (expenses.length === 0) {
       return;
     }
+
+    let totalAmount = 0;
+
+    expenses.map((item) => {
+      console.log(item.amount);
+
+      totalAmount = totalAmount + Number(item.amount);
+    });
+
+    setTotal(totalAmount);
+    setTransactionCount(expenses.length);
+
+    console.log("TotalAmount: ", total);
   }, [expenses]);
 
   const retry = () => {
     setRetryCount((prev) => prev + 1);
   };
 
-  return { expenses, isLoading, error, retry };
+  return { expenses, total, transactionCount, isLoading, error, retry };
 };

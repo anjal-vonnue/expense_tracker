@@ -12,9 +12,9 @@ import { useExpenseRange } from "@/hooks/useExpenseRange";
 import { TrendingUp, Wallet } from "lucide-react";
 
 export const TotalExpenses = () => {
-  const { expenses } = useExpenseRange();
+  const { expenses, transactionCount } = useExpenseRange();
 
-  console.log("TOTAL EXPENSES: ", expenses);
+  console.log("TOTAL EXPENSES: ", transactionCount);
 
   return (
     <Card className="flex lg:aspect-video flex-col bg-green-50 md:h-80 w-full">
