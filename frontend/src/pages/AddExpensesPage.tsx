@@ -1,30 +1,31 @@
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getLocalTimeZone, type CalendarDate } from "@internationalized/date";
+import { useState } from "react";
 
 const AddExpensesPage = () => {
+  const [date, setDate] = useState<CalendarDate | null>(null);
+
   const categories = [
     { label: "Food", value: "food" },
     { label: "Transport", value: "transport" },
@@ -34,71 +35,135 @@ const AddExpensesPage = () => {
     { label: "Others", value: "others" },
   ];
 
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState<string>("others");
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const expense = {
+      title: title.trim(),
+      amount: Number(amount),
+      category,
+      date: date?.toString() ?? null,
+    };
+
+    console.log("expense:", expense);
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
-        <CardAction>Card Action</CardAction>
+    <Card className="flex h-full">
+      <CardHeader className="flex flex-col justify-center items-center">
+        <CardTitle>Add Expenses</CardTitle>
+        <CardDescription className="text-center">
+          Record a new expense to keep your finances organized
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form className="w-full max-w-sm">
+      <CardContent className="flex justify-center items-center flex-1">
+        <form className="w-full max-w-sm" onSubmit={handleSubmit}>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="form-name">Title</FieldLabel>
+              <FieldLabel htmlFor="expense-title">Title</FieldLabel>
               <Input
-                id="form-name"
+                id="expense-title"
                 type="text"
                 placeholder="Bought Bananas"
                 required
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="form-email">Amount</FieldLabel>
-              <Input id="form-email" type="text" placeholder="₹480" />
+              <FieldLabel htmlFor="expense-amount">Amount</FieldLabel>
+              <Input
+                id="expense-amount"
+                type="text"
+                placeholder="₹480"
+                required
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value);
+                }}
+              />
             </Field>
-            <div className="grid grid-cols-2 gap-4">
-              <Field>
-                <FieldLabel htmlFor="form-country">Category</FieldLabel>
-                <Select items={categories} defaultValue="us">
-                  <SelectTrigger id="form-country">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {categories.map((country) => (
-                        <SelectItem key={country.value} value={country.value}>
-                          {country.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="form-phone">Phone</FieldLabel>
-                <Input
-                  id="form-phone"
-                  type="tel"
-                  placeholder="+1 (555) 123-4567"
-                />
-              </Field>
-            </div>
             <Field>
-              <FieldLabel htmlFor="form-address">Address</FieldLabel>
-              <Input id="form-address" type="text" placeholder="123 Main St" />
+              <FieldLabel htmlFor="expense-category">Category</FieldLabel>
+
+              <Select
+                id="expense-category"
+                placeholder="Select a fruit"
+                className="w-full"
+                value={category}
+                onChange={(value) => {
+                  if (typeof value === "string") {
+                    setCategory(value);
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Categories</SelectLabel>
+                    {categories.map((item) => (
+                      <SelectItem key={item.value} id={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </Field>
+            <Field>
+              <FieldLabel htmlFor="expense-date">Date</FieldLabel>
+              <PopoverTrigger>
+                <Button
+                  variant="outline"
+                  id="expense-date"
+                  className="justify-start font-normal"
+                >
+                  {date ? (
+                    date
+                      .toDate(getLocalTimeZone())
+                      .toLocaleDateString(undefined, {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })
+                  ) : (
+                    <span>Choose a date</span>
+                  )}
+                </Button>
+                <Popover className="w-auto p-0" placement="bottom start">
+                  <Calendar value={date} onChange={setDate} />
+                </Popover>
+              </PopoverTrigger>
+            </Field>
+            {/* </div> */}
             <Field orientation="horizontal">
-              <Button type="button" variant="outline">
-                Cancel
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setTitle("");
+                  setCategory("others");
+                  setAmount("");
+                  setDate(null);
+                }}
+              >
+                Reset
               </Button>
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Save Expense</Button>
             </Field>
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
+      <CardFooter className="flex justify-center items-center">
+        <p>Keep track of your spending.</p>
       </CardFooter>
     </Card>
   );
