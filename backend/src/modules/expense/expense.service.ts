@@ -2,6 +2,7 @@ import type { Prisma } from "../../generated/prisma/client.js";
 import prisma from "../../prisma/connection.js";
 import type {
   expenseSchemaInput,
+  filterDateSchemaInput,
   updateSchemaInput,
 } from "../../zod/expense.schema.js";
 import type { querySchemaType } from "../../zod/query.schema.js";
@@ -136,4 +137,31 @@ export async function deleteExpense(id: number) {
   });
 
   return deletedExpense;
+}
+
+export async function filterExpense(
+  dates: filterDateSchemaInput,
+  userId: number,
+) {
+  const { fromDate, toDate } = dates;
+
+  const startDate = new Date(`${fromDate}T00:00:00Z`);
+  const endDate = new Date(
+    new Date(`${toDate}T00:00:00Z`).getTime() + 86400000,
+  );
+
+  const expenses = await prisma.expense.findMany({
+    where: {
+      userId,
+      expenseDate: {
+        gte: startDate,
+        lt: endDate,
+      },
+    },
+    orderBy: {
+      expenseDate: "desc",
+    },
+  });
+
+  return expenses;
 }

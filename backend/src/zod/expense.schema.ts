@@ -25,6 +25,12 @@ export const expenseSchema = expenseBaseSchema.extend({
     .default("others"),
 });
 
+export const filterDateSchema = z.object({
+  fromDate: z.string().trim().min(1, "fromDate is required"),
+  toDate: z.string().trim().min(1, "toDate is required"),
+});
+
 export const updateExpenseSchema = expenseBaseSchema.partial();
 export type expenseSchemaInput = z.infer<typeof expenseSchema>;
 export type updateSchemaInput = z.infer<typeof updateExpenseSchema>;
+export type filterDateSchemaInput = z.infer<typeof filterDateSchema>;

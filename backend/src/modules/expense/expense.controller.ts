@@ -3,6 +3,7 @@ import type { AuthRequest } from "../auth/auth.middleware.js";
 import * as expenseService from "./expense.service.js";
 import {
   expenseSchema,
+  filterDateSchema,
   updateExpenseSchema,
 } from "../../zod/expense.schema.js";
 import { idSchema } from "../../zod/id.schema.js";
@@ -147,6 +148,32 @@ export async function getByIdHandler(req: AuthRequest, res: Response) {
     if (error instanceof Error && error.message === "NOT_FOUND") {
       return res.status(404).json({ error: "not found" });
     }
+
+    return res.status(500).json({ error: "internal server error" });
+  }
+}
+
+export async function filterByDateHandler(req: AuthRequest, res: Response) {
+  try {
+    console.log("hello");
+
+    const validation = filterDateSchema.safeParse(req.body);
+
+    if (!validation.success) {
+      return res.status(400).json({
+        error: "validation error",
+        details: validation.error.flatten().formErrors,
+      });
+    }
+
+    const result = await expenseService.filterExpense(
+      req.body,
+      Number(req.userId),
+    );
+
+    return res.status(200).json({ date: result });
+  } catch (error) {
+    console.log(error);
 
     return res.status(500).json({ error: "internal server error" });
   }
