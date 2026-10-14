@@ -13,8 +13,9 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useExpense } from "@/context/ExpenseContext";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [name, setName] = useState<string>("");
@@ -22,7 +23,10 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [password, setPassword] = useState<string>("");
   const [confirmPass, setConfirmPass] = useState<string>("");
 
-  const handleSumbit = (e: React.SubmitEvent) => {
+  const { register, isLoading } = useExpense();
+  const navigate = useNavigate();
+
+  const handleSumbit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     const data = {
@@ -33,6 +37,14 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     };
 
     console.log("signup data: ", data);
+
+    try {
+      await register(data.name, data.email, data.confirmPass);
+      navigate("/");
+      console.log("naviage below");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -104,7 +116,9 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
             </Field>
             <FieldGroup>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit">
+                  {isLoading ? "Loading..." : "Create Account"}
+                </Button>
                 <FieldDescription className="px-6 text-center">
                   Already have an account? <Link to={"/login"}>Sign in</Link>
                 </FieldDescription>

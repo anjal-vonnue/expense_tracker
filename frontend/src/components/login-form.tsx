@@ -15,7 +15,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useExpense } from "@/context/ExpenseContext";
 
@@ -25,10 +25,11 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
-  const { login } = useExpense();
+  const { login, isLoading } = useExpense();
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     const data = {
@@ -38,7 +39,13 @@ export function LoginForm({
 
     console.log("loginData: ", data);
 
-    login(data.email, data.password);
+    try {
+      await login(data.email, data.password);
+      navigate("/");
+      console.log("naviage below");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -81,7 +88,9 @@ export function LoginForm({
                 />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit">
+                  {isLoading ? "loading..." : "Login"}
+                </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}
                   <Link to={"/signup"}>Sign up</Link>

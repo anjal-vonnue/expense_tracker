@@ -44,14 +44,17 @@ export function ExpenseProvider({ children }: { children: React.ReactNode }) {
 
     localStorage.setItem("expense-user", JSON.stringify(data.data));
     localStorage.setItem("expense-token", data.token);
+
+    setUser(data.data);
+    setToken(data.token);
   }
 
   async function register(name: string, email: string, password: string) {
     const data = await registerApi(name, email, password);
-    localStorage.setItem("expense-user", JSON.stringify(data.user));
+    localStorage.setItem("expense-user", JSON.stringify(data.data));
     localStorage.setItem("expense-token", data.token);
 
-    setUser(data.user);
+    setUser(data.data);
     setToken(data.token);
   }
 

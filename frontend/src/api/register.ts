@@ -1,7 +1,7 @@
 import type { User } from "@/context/ExpenseContext";
 
 export type registerResponse = {
-  user: User;
+  data: User;
   token: string;
 };
 
