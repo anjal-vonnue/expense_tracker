@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "../ui/table";
 import { useNavigate } from "react-router";
+import useRecent from "@/hooks/useRecent";
 
 const expenses = [
   {
@@ -94,6 +95,9 @@ const expenses = [
 const RecentTransaction = () => {
   const navigate = useNavigate();
 
+  const { recent } = useRecent();
+  console.log(recent);
+
   return (
     <Card className="w-full  bg-muted/50">
       <CardHeader>
@@ -118,19 +122,19 @@ const RecentTransaction = () => {
               <TableHead className="text-right">Date</TableHead>
             </TableHeader>
             <TableBody>
-              {expenses.map((expense) => (
-                <TableRow key={expense.id} className="">
-                  <TableCell className="font-medium">{expense.title}</TableCell>
+              {recent.map((item) => (
+                <TableRow key={item.id} className="">
+                  <TableCell className="font-medium">{item.title}</TableCell>
+                  <TableCell className="text-right">{item.category}</TableCell>
                   <TableCell className="text-right">
-                    {expense.category}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {expense.amount.toLocaleString("en-IN", {
+                    {Number(item.amount).toLocaleString("en-IN", {
                       style: "currency",
                       currency: "INR",
                     })}
                   </TableCell>
-                  <TableCell className="text-right">{expense.date}</TableCell>
+                  <TableCell className="text-right">
+                    {new Date(item.expenseDate).toDateString()}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
