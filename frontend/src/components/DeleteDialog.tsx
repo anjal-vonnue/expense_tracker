@@ -35,6 +35,7 @@ const DeleteDialog = ({ expenseId }: DeleteDialogProps) => {
             onClick={() => {
               console.log(expenseId);
             }}
+            variant={"destructive"}
           >
             Continue
           </AlertDialogAction>
