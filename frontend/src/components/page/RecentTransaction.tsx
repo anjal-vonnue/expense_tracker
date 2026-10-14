@@ -23,7 +23,7 @@ const RecentTransaction = () => {
   const navigate = useNavigate();
 
   const { recent } = useRecent();
-  console.log(recent);
+  // console.log(recent);
 
   return (
     <Card className="w-full  bg-muted/50">

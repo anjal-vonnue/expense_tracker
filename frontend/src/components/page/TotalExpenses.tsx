@@ -7,10 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useExpenseRange } from "@/hooks/useExpenseRange";
 
 import { TrendingUp, Wallet } from "lucide-react";
 
 export const TotalExpenses = () => {
+  const { expenses } = useExpenseRange();
+
+  console.log("TOTAL EXPENSES: ", expenses);
+
   return (
     <Card className="flex lg:aspect-video flex-col bg-green-50 md:h-80 w-full">
       <CardHeader className="relative">

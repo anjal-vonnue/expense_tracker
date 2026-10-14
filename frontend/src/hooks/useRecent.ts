@@ -45,7 +45,7 @@ export default function useRecent() {
         const result = await response.json();
 
         setRecent(result.data);
-        console.log("Result: ", result.data);
+        // console.log("Result: ", result.data);
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") {
           return;
