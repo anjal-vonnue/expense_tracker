@@ -127,6 +127,7 @@ export function SpendingCategory() {
 
             {chartData.map((item) => {
               const percentage = (item.spend / total) * 100;
+              console.log(item.fill);
 
               return (
                 <div
@@ -135,7 +136,7 @@ export function SpendingCategory() {
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <span
-                      className="h-3 w-3 shrink-0"
+                      className="h-3 w-3 shrink-0 bg-red-300"
                       style={{ backgroundColor: item.fill }}
                     />
                     <span className="truncate text-sm font-medium capitalize">

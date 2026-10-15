@@ -73,6 +73,12 @@
   --chart-4: oklch(0.554 0.135 66.442);
   --chart-5: oklch(0.476 0.114 61.907);
   --chart-6: oklch(35.482% 0.07962 63.728);
+  --color-food: var(--chart-1);
+  --color-transport: var(--chart-2);
+  --color-shopping: var(--chart-3);
+  --color-bills: var(--chart-4);
+  --color-entertainment: var(--chart-5);
+  --color-others: var(--chart-6);
   --radius: 0.625rem;
   --sidebar: oklch(0.987 0.002 197.1);
   --sidebar-foreground: oklch(0.148 0.004 228.8);
