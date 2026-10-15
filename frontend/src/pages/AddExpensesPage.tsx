@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import { useCreateExpense } from "@/hooks/useCreateExpense";
 import { getLocalTimeZone, type CalendarDate } from "@internationalized/date";
 import { useState } from "react";
@@ -185,7 +186,14 @@ const AddExpensesPage = () => {
                 Reset
               </Button>
               <Button type="submit">
-                {isPending ? "Saving.." : "Save Expense"}
+                {isPending ? (
+                  <div className="flex items-center gap-3">
+                    <Spinner />
+                    Saving..
+                  </div>
+                ) : (
+                  "Save Expense"
+                )}
               </Button>
             </Field>
           </FieldGroup>
