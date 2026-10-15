@@ -32,18 +32,15 @@ const ExpensesPage = () => {
   console.log(pagination);
 
   return (
-    <Card
-      className="w-full h-fit
-     bg-muted/50 flex flex-col"
-    >
-      <CardHeader>
+    <Card className="flex min-h-0 flex-1 flex-col overflow-hidden bg-muted/50">
+      <CardHeader className="shrink-0">
         <CardTitle>All Expenses</CardTitle>
         <CardDescription>
-          this is your expensese for the recent month
+          This is your expenses for the recent month
         </CardDescription>
       </CardHeader>
-      <CardContent className="">
-        <div className="h-full overflow-y-auto flex-1">
+      <CardContent className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-y-auto">
           <Table>
             <TableHeader>
               <TableHead isRowHeader className="w-25">
@@ -86,7 +83,7 @@ const ExpensesPage = () => {
           </Table>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="shrink-0">
         <Pagination>
           <PaginationContent>
             <PaginationItem>
@@ -108,7 +105,6 @@ const ExpensesPage = () => {
             ).map((pageNumber) => (
               <PaginationItem key={pageNumber}>
                 <PaginationLink
-                  href="#"
                   isActive={pagination?.page! === pageNumber}
                   onClick={(e) => {
                     e.preventDefault();
