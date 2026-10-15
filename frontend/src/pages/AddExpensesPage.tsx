@@ -20,11 +20,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useCreateExpense } from "@/hooks/useCreateExpense";
 import { getLocalTimeZone, type CalendarDate } from "@internationalized/date";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const AddExpensesPage = () => {
   const [date, setDate] = useState<CalendarDate | null>(null);
+  const [dateError, setDateError] = useState<boolean>(false);
+
+  const { createExpense, isPending, error } = useCreateExpense();
+  const navigate = useNavigate();
 
   const categories = [
     { label: "Food", value: "food" },
@@ -39,17 +45,27 @@ const AddExpensesPage = () => {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState<string>("others");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!date) {
+      setDateError(true);
+      return;
+    }
 
     const expense = {
       title: title.trim(),
-      amount: Number(amount),
+      amount,
       category,
-      date: date?.toString() ?? null,
+      expenseDate: date?.toString()!,
     };
 
     console.log("expense:", expense);
+
+    try {
+      await createExpense(expense);
+      navigate("/");
+    } catch (error) {}
   };
 
   return (
@@ -141,8 +157,17 @@ const AddExpensesPage = () => {
                   )}
                 </Button>
                 <Popover className="w-auto p-0" placement="bottom start">
-                  <Calendar value={date} onChange={setDate} />
+                  <Calendar
+                    value={date}
+                    onChange={(date) => {
+                      setDate(date);
+                      setDateError(false);
+                    }}
+                  />
                 </Popover>
+                {dateError && (
+                  <p className="text-red-500">please select and expense date</p>
+                )}
               </PopoverTrigger>
             </Field>
             {/* </div> */}
@@ -159,9 +184,12 @@ const AddExpensesPage = () => {
               >
                 Reset
               </Button>
-              <Button type="submit">Save Expense</Button>
+              <Button type="submit">
+                {isPending ? "Saving.." : "Save Expense"}
+              </Button>
             </Field>
           </FieldGroup>
+          {error && <p className="text-center pt-5 text-red-500">{error}</p>}
         </form>
       </CardContent>
       <CardFooter className="flex justify-center items-center">
