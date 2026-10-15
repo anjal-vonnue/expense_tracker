@@ -17,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -28,7 +29,7 @@ import {
 import useGetExpenses from "@/hooks/useGetExpenses";
 
 const ExpensesPage = () => {
-  const { expenses, pagination, setPage } = useGetExpenses();
+  const { expenses, pagination, isLoading, setPage, retry } = useGetExpenses();
   console.log(pagination);
 
   return (
@@ -41,46 +42,56 @@ const ExpensesPage = () => {
       </CardHeader>
       <CardContent className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <Table>
-            <TableHeader>
-              <TableHead isRowHeader className="w-25">
-                Title
-              </TableHead>
-              <TableHead className="text-right">Category</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-              <TableHead className="text-right">Date</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableHeader>
-            <TableBody>
-              {expenses.map((expense) => (
-                <TableRow key={expense.id}>
-                  <TableCell className="font-medium">{expense.title}</TableCell>
-                  <TableCell className="text-right">
-                    {expense.category}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {Number(expense.amount).toLocaleString("en-IN", {
-                      style: "currency",
-                      currency: "INR",
-                    })}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {expense.expenseDate.split("T")[0]}
-                  </TableCell>
-                  <TableCell className="flex justify-end ">
-                    <EditDialog
-                      id={expense.id}
-                      title={expense.title}
-                      category={expense.category}
-                      amount={Number(expense.amount)}
-                      date={expense.expenseDate.split("T")[0]}
-                    />
-                    <DeleteDialog expenseId={expense.id} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {isLoading ? (
+            <div className="w-full h-full flex items-center justify-center gap-4">
+              <Spinner />
+            </div>
+          ) : (
+            <>
+              <Table>
+                <TableHeader>
+                  <TableHead isRowHeader className="w-25">
+                    Title
+                  </TableHead>
+                  <TableHead className="text-right">Category</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead className="text-right">Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableHeader>
+                <TableBody>
+                  {expenses.map((expense) => (
+                    <TableRow key={expense.id}>
+                      <TableCell className="font-medium">
+                        {expense.title}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {expense.category}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {Number(expense.amount).toLocaleString("en-IN", {
+                          style: "currency",
+                          currency: "INR",
+                        })}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {expense.expenseDate.split("T")[0]}
+                      </TableCell>
+                      <TableCell className="flex justify-end ">
+                        <EditDialog
+                          id={expense.id}
+                          title={expense.title}
+                          category={expense.category}
+                          amount={Number(expense.amount)}
+                          date={expense.expenseDate.split("T")[0]}
+                        />
+                        <DeleteDialog expenseId={expense.id} retry={retry} />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
         </div>
       </CardContent>
       <CardFooter className="shrink-0">

@@ -10,12 +10,16 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
+import useDelete from "@/hooks/useDelete";
+import { Spinner } from "./ui/spinner";
 
 type DeleteDialogProps = {
   expenseId: number;
+  retry: () => void;
 };
 
-const DeleteDialog = ({ expenseId }: DeleteDialogProps) => {
+const DeleteDialog = ({ expenseId, retry }: DeleteDialogProps) => {
+  const { deleteExpense, isPending } = useDelete();
   return (
     <AlertDialogTrigger>
       <Button variant="destructive" size="icon">
@@ -32,12 +36,21 @@ const DeleteDialog = ({ expenseId }: DeleteDialogProps) => {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => {
-              console.log(expenseId);
+            onClick={async () => {
+              console.log("DELETED ID: ", expenseId);
+              await deleteExpense(expenseId);
+              retry();
             }}
             variant={"destructive"}
           >
-            Continue
+            {isPending ? (
+              <div className="flex items-center gap-3">
+                <Spinner />
+                Deleting..
+              </div>
+            ) : (
+              "Continue"
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialog>
