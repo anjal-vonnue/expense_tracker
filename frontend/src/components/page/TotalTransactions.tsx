@@ -7,9 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useExpenseRange } from "@/hooks/useExpenseRange";
 import { ArrowLeftRight, TrendingUp } from "lucide-react";
 
 const TotalTransactions = () => {
+  const { transactionCount } = useExpenseRange();
+
   return (
     <Card className="flex lg:aspect-video flex-col bg-blue-50 md:h-80 w-full">
       <CardHeader>
@@ -29,7 +32,9 @@ const TotalTransactions = () => {
       </CardHeader>
 
       <CardContent className="flex-1">
-        <h1 className="text-4xl font-bold tracking-tight text-blue-950">18</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-blue-950">
+          {transactionCount}
+        </h1>
         <p className="mt-1 text-sm text-blue-800/70">
           Total transactions this month
         </p>

@@ -1,4 +1,3 @@
-import React from "react";
 import { TrendingUp } from "lucide-react";
 import { Label, Pie, PieChart, Cell } from "recharts";
 
@@ -17,6 +16,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useExpenseRange } from "@/hooks/useExpenseRange";
 
 type SpendingCategory =
   | "food"
@@ -26,24 +26,11 @@ type SpendingCategory =
   | "entertainment"
   | "others";
 
-type ChartData = {
+export type ChartData = {
   category: SpendingCategory;
   spend: number;
   fill: string;
 };
-
-const chartData: ChartData[] = [
-  { category: "food", spend: 275, fill: "var(--color-food)" },
-  { category: "transport", spend: 200, fill: "var(--color-transport)" },
-  { category: "shopping", spend: 287, fill: "var(--color-shopping)" },
-  { category: "bills", spend: 173, fill: "var(--color-bills)" },
-  {
-    category: "entertainment",
-    spend: 173,
-    fill: "var(--color-entertainment)",
-  },
-  { category: "others", spend: 190, fill: "var(--color-others)" },
-];
 
 const chartConfig = {
   spend: { label: "Spending" },
@@ -58,18 +45,8 @@ const chartConfig = {
   others: { label: "Others", color: "var(--chart-6)" },
 } satisfies ChartConfig;
 
-const currency = (amount: number) =>
-  new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(amount);
-
 export function SpendingCategory() {
-  const totalSpend = React.useMemo(
-    () => chartData.reduce((total, item) => total + item.spend, 0),
-    [],
-  );
+  const { total, highestPaid, category: chartData } = useExpenseRange();
 
   return (
     <Card className="w-full overflow-hidden bg-muted/50">
@@ -122,7 +99,7 @@ export function SpendingCategory() {
                               dy="-0.4em"
                               className="fill-foreground text-2xl font-bold"
                             >
-                              {currency(totalSpend)}
+                              ₹{total}
                             </tspan>
                             <tspan
                               x={viewBox.cx}
@@ -149,7 +126,7 @@ export function SpendingCategory() {
             </div>
 
             {chartData.map((item) => {
-              const percentage = (item.spend / totalSpend) * 100;
+              const percentage = (item.spend / total) * 100;
 
               return (
                 <div
@@ -168,7 +145,7 @@ export function SpendingCategory() {
 
                   <div className="shrink-0 text-right">
                     <p className="text-sm font-semibold tabular-nums">
-                      {currency(item.spend)}
+                      ₹{item.spend}
                     </p>
                     <p className="text-xs text-muted-foreground tabular-nums">
                       {percentage.toFixed(1)}%
@@ -184,7 +161,7 @@ export function SpendingCategory() {
       <CardFooter className="flex justify-center items-start gap-2 border-t bg-muted/30 px-6 py-4">
         <TrendingUp className="h-4 w-4 text-emerald-600" />
         <p className="font-bold text-md">
-          Shopping is your highest spending category
+          {highestPaid.category} is your highest spending category
         </p>
       </CardFooter>
     </Card>
