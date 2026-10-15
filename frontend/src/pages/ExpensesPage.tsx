@@ -4,9 +4,19 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
@@ -15,141 +25,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const expenses = [
-  {
-    id: 1,
-    title: "Bought Bananas",
-    category: "Food",
-    amount: 250.0,
-    date: "2026-10-12",
-  },
-  {
-    id: 2,
-    title: "Uber Ride",
-    category: "Transport",
-    amount: 180.0,
-    date: "2026-10-11",
-  },
-  {
-    id: 3,
-    title: "New T-Shirt",
-    category: "Shopping",
-    amount: 799.0,
-    date: "2026-10-10",
-  },
-  {
-    id: 4,
-    title: "Electricity Bill",
-    category: "Bills",
-    amount: 1450.0,
-    date: "2026-10-09",
-  },
-  {
-    id: 5,
-    title: "Movie Tickets",
-    category: "Entertainment",
-    amount: 500.0,
-    date: "2026-10-08",
-  },
-  {
-    id: 6,
-    title: "Mobile Recharge",
-    category: "Bills",
-    amount: 299.0,
-    date: "2026-10-07",
-  },
-  {
-    id: 7,
-    title: "Lunch at Restaurant",
-    category: "Food",
-    amount: 650.0,
-    date: "2026-10-06",
-  },
-  {
-    id: 8,
-    title: "Petrol",
-    category: "Transport",
-    amount: 1200.0,
-    date: "2026-10-05",
-  },
-  {
-    id: 9,
-    title: "Headphones",
-    category: "Shopping",
-    amount: 1999.0,
-    date: "2026-10-04",
-  },
-  {
-    id: 10,
-    title: "Stationery",
-    category: "Others",
-    amount: 320.0,
-    date: "2026-10-03",
-  },
-  {
-    id: 11,
-    title: "Stationery",
-    category: "Food",
-    amount: 320.0,
-    date: "2026-10-03",
-  },
-  {
-    id: 12,
-    title: "Stationery",
-    category: "Food",
-    amount: 320.0,
-    date: "2026-10-03",
-  },
-  {
-    id: 13,
-    title: "Stationery",
-    category: "Food",
-    amount: 320.0,
-    date: "2026-10-03",
-  },
-  {
-    id: 14,
-    title: "Stationery",
-    category: "Food",
-    amount: 320.0,
-    date: "2026-10-03",
-  },
-  {
-    id: 15,
-    title: "Stationery",
-    category: "Food",
-    amount: 320.0,
-    date: "2026-10-03",
-  },
-  {
-    id: 16,
-    title: "Stationery",
-    category: "Food",
-    amount: 320.0,
-    date: "2026-10-03",
-  },
-  {
-    id: 17,
-    title: "Stationery",
-    category: "Food",
-    amount: 320.0,
-    date: "2026-10-03",
-  },
-];
+import useGetExpenses from "@/hooks/useGetExpenses";
 
 const ExpensesPage = () => {
+  const { expenses, pagination, setPage } = useGetExpenses();
+  console.log(pagination);
+
   return (
-    <Card className="w-full  bg-muted/50">
+    <Card
+      className="w-full h-fit
+     bg-muted/50 flex flex-col"
+    >
       <CardHeader>
         <CardTitle>All Expenses</CardTitle>
         <CardDescription>
           this is your expensese for the recent month
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        {/* <h1 className="text-5xl font-bold">12,480</h1> */}
-        <div className="h-full overflow-y-auto">
+      <CardContent className="">
+        <div className="h-full overflow-y-auto flex-1">
           <Table>
             <TableHeader>
               <TableHead isRowHeader className="w-25">
@@ -168,19 +62,21 @@ const ExpensesPage = () => {
                     {expense.category}
                   </TableCell>
                   <TableCell className="text-right">
-                    {expense.amount.toLocaleString("en-IN", {
+                    {Number(expense.amount).toLocaleString("en-IN", {
                       style: "currency",
                       currency: "INR",
                     })}
                   </TableCell>
-                  <TableCell className="text-right">{expense.date}</TableCell>
+                  <TableCell className="text-right">
+                    {expense.expenseDate.split("T")[0]}
+                  </TableCell>
                   <TableCell className="flex justify-end ">
                     <EditDialog
                       id={expense.id}
                       title={expense.title}
                       category={expense.category}
-                      amount={expense.amount}
-                      date={expense.date}
+                      amount={Number(expense.amount)}
+                      date={expense.expenseDate.split("T")[0]}
                     />
                     <DeleteDialog expenseId={expense.id} />
                   </TableCell>
@@ -190,6 +86,60 @@ const ExpensesPage = () => {
           </Table>
         </div>
       </CardContent>
+      <CardFooter>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (pagination?.page && pagination.page > 1) {
+                    setPage(pagination.page - 1);
+                  }
+                }}
+                className={
+                  pagination?.page! <= 1 ? "pointer-events-none opacity-50" : ""
+                }
+              />
+            </PaginationItem>
+            {Array.from(
+              { length: pagination?.totalPages! },
+              (_, i) => i + 1,
+            ).map((pageNumber) => (
+              <PaginationItem key={pageNumber}>
+                <PaginationLink
+                  href="#"
+                  isActive={pagination?.page! === pageNumber}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage(pageNumber);
+                  }}
+                >
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (
+                    pagination?.page &&
+                    pagination.page < pagination.totalPages
+                  ) {
+                    setPage(pagination.page + 1);
+                  }
+                }}
+                className={
+                  pagination?.page! >= pagination?.totalPages!
+                    ? "pointer-events-none opacity-50"
+                    : ""
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </CardFooter>
     </Card>
   );
 };
