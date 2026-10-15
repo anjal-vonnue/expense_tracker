@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useExpenseRange } from "@/hooks/useExpenseRange";
+import { useExpenseRange } from "@/context/ExpenseRangeContext";
+
 import { ArrowLeftRight, TrendingUp } from "lucide-react";
 
 const TotalTransactions = () => {

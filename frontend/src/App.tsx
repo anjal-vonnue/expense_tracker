@@ -8,6 +8,7 @@ import { LoginForm } from "./components/login-form";
 import { SignupForm } from "./components/signup-form";
 import LoginProtection from "./components/LoginProtection";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { ExpenseRangeProvider } from "./context/ExpenseRangeContext";
 
 function App() {
   return (
@@ -20,7 +21,13 @@ function App() {
           </Route>
         </Route>
         <Route element={<ProtectedRoute />}>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <ExpenseRangeProvider>
+                <AppLayout />
+              </ExpenseRangeProvider>
+            }
+          >
             <Route index element={<Dashboard />} />
             <Route path="expenses" element={<ExpensesPage />} />
             <Route path="new" element={<AddExpensesPage />} />

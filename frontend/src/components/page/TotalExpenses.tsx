@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useExpenseRange } from "@/hooks/useExpenseRange";
+import { useExpenseRange } from "@/context/ExpenseRangeContext";
 
 import { TrendingUp, Wallet } from "lucide-react";
 

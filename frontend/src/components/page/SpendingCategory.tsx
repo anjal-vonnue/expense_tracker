@@ -16,7 +16,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { useExpenseRange } from "@/hooks/useExpenseRange";
+import { useExpenseRange } from "@/context/ExpenseRangeContext";
 
 type SpendingCategory =
   | "food"
@@ -161,7 +161,7 @@ export function SpendingCategory() {
       <CardFooter className="flex justify-center items-start gap-2 border-t bg-muted/30 px-6 py-4">
         <TrendingUp className="h-4 w-4 text-emerald-600" />
         <p className="font-bold text-md">
-          {highestPaid.category} is your highest spending category
+          {highestPaid?.category} is your highest spending category
         </p>
       </CardFooter>
     </Card>

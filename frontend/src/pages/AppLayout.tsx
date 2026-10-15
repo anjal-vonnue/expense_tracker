@@ -11,9 +11,11 @@ import { Field } from "@/components/ui/field";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { useExpenseRange } from "@/context/ExpenseRangeContext";
+
 import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { DateRange } from "react-aria-components";
 
 import { Outlet, useLocation } from "react-router";
@@ -30,9 +32,13 @@ const AppLayout = () => {
   });
 
   const location = useLocation();
-  console.log(location);
+  const { setDateRange } = useExpenseRange();
 
-  console.log(date?.start.toString());
+  useEffect(() => {
+    if (!date?.start || !date?.end) return;
+
+    setDateRange([date.start.toString(), date.end.toString()]);
+  }, [date, setDateRange]);
 
   return (
     <>
