@@ -85,7 +85,7 @@ const AppSidebar = () => {
             <SidebarMenuButton>
               <Link
                 to="/profile"
-                className="flex w-full items-center gap-2 px-2 py-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                className="flex w-full justify-center items-center gap-2 px-2 py-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               >
                 <User2 />
                 <span>{user?.name}</span>
@@ -94,41 +94,30 @@ const AppSidebar = () => {
           </SidebarMenuItem>
           {user?.name && (
             <SidebarMenuItem>
-              {/* <SidebarMenuButton>
-                <Link
-                  to="/profile"
-                  className="flex w-full items-center gap-2 px-2 py-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                >
-                  <User2 />
-                  <span>{user?.name}</span>
-                </Link>
-              </SidebarMenuButton> */}
-              <SidebarMenuButton>
-                <AlertDialogTrigger>
-                  <Button variant="destructive" className="w-full">
-                    Logout
-                  </Button>
-                  <AlertDialog size="sm">
-                    <AlertDialogHeader>
-                      <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
-                        <LogOut />
-                      </AlertDialogMedia>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel variant="outline">
-                        Cancel
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        variant="destructive"
-                        onClick={handleSumbit}
-                      >
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialog>
-                </AlertDialogTrigger>
-              </SidebarMenuButton>
+              <AlertDialogTrigger>
+                <Button variant="destructive" className="w-full">
+                  Logout
+                </Button>
+                <AlertDialog size="sm">
+                  <AlertDialogHeader>
+                    <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
+                      <LogOut />
+                    </AlertDialogMedia>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel variant="outline">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      variant="destructive"
+                      onClick={handleSumbit}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialog>
+              </AlertDialogTrigger>
             </SidebarMenuItem>
           )}
         </SidebarMenu>
