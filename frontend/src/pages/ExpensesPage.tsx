@@ -85,6 +85,8 @@ const ExpensesPage = () => {
                           category={expense.category}
                           amount={Number(expense.amount)}
                           date={expense.expenseDate.split("T")[0]}
+                          retry={retry}
+                          contextRetry={contextRetry}
                         />
                         <DeleteDialog
                           expenseId={expense.id}

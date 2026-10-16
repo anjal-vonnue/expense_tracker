@@ -29,6 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import useEdit from "@/hooks/useEdit";
+import { Spinner } from "./ui/spinner";
 
 type EditDialogProps = {
   id: number;
@@ -36,13 +38,25 @@ type EditDialogProps = {
   category: string;
   amount: number;
   date: string;
+  retry: () => void;
+  contextRetry: () => void;
 };
 
-const EditDialog = ({ id, title, category, amount, date }: EditDialogProps) => {
+const EditDialog = ({
+  id,
+  title,
+  category,
+  amount,
+  date,
+  retry,
+  contextRetry,
+}: EditDialogProps) => {
   const [editTitle, setEditTitle] = useState<string>(title);
   const [editCategory, setEditCategory] = useState<string>(category);
   const [editAmount, setEditAmount] = useState<number>(amount);
   const [editDate, setEditDate] = useState<CalendarDate>(parseDate(date));
+
+  const { editExpense, isPending } = useEdit();
 
   const resetForm = () => {
     setEditTitle(title);
@@ -60,16 +74,21 @@ const EditDialog = ({ id, title, category, amount, date }: EditDialogProps) => {
     { label: "Others", value: "others" },
   ];
 
-  const handleSumbit = () => {
+  const handleSumbit = async () => {
     const editData = {
-      id: id,
-      title: editTitle.trim(),
-      category: editCategory.trim(),
-      amount: editAmount,
-      date: editDate?.toString() ?? null,
+      ...(title.trim() !== editTitle.trim() && { title: editTitle.trim() }),
+      ...(category.trim() !== editCategory.trim() && {
+        category: editCategory.trim(),
+      }),
+      ...(amount !== editAmount && { amount: String(editAmount) }),
+      ...(date.trim() !== editDate.toString() && {
+        expenseDate: editDate?.toString() ?? null,
+      }),
     };
 
-    console.log("edit: ", editData);
+    await editExpense(id, editData);
+    retry();
+    contextRetry();
   };
 
   return (
@@ -175,7 +194,14 @@ const EditDialog = ({ id, title, category, amount, date }: EditDialogProps) => {
           <DialogFooter>
             <DialogClose variant="outline">Cancel</DialogClose>
             <Button type="submit" onClick={handleSumbit}>
-              Save changes
+              {isPending ? (
+                <div className="flex items-center gap-3">
+                  <Spinner />
+                  Saving...
+                </div>
+              ) : (
+                "Save changes"
+              )}
             </Button>
           </DialogFooter>
         </Dialog>
