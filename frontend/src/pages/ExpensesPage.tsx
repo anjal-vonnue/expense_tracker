@@ -26,10 +26,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useExpenseRange } from "@/context/ExpenseRangeContext";
 import useGetExpenses from "@/hooks/useGetExpenses";
 
 const ExpensesPage = () => {
   const { expenses, pagination, isLoading, setPage, retry } = useGetExpenses();
+  const { retry: contextRetry } = useExpenseRange();
   console.log(pagination);
 
   return (
@@ -84,7 +86,11 @@ const ExpensesPage = () => {
                           amount={Number(expense.amount)}
                           date={expense.expenseDate.split("T")[0]}
                         />
-                        <DeleteDialog expenseId={expense.id} retry={retry} />
+                        <DeleteDialog
+                          expenseId={expense.id}
+                          retry={retry}
+                          contextRetry={contextRetry}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}

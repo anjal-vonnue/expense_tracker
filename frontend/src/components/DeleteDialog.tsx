@@ -16,9 +16,14 @@ import { Spinner } from "./ui/spinner";
 type DeleteDialogProps = {
   expenseId: number;
   retry: () => void;
+  contextRetry: () => void;
 };
 
-const DeleteDialog = ({ expenseId, retry }: DeleteDialogProps) => {
+const DeleteDialog = ({
+  expenseId,
+  retry,
+  contextRetry,
+}: DeleteDialogProps) => {
   const { deleteExpense, isPending } = useDelete();
   return (
     <AlertDialogTrigger>
@@ -40,6 +45,7 @@ const DeleteDialog = ({ expenseId, retry }: DeleteDialogProps) => {
               console.log("DELETED ID: ", expenseId);
               await deleteExpense(expenseId);
               retry();
+              contextRetry();
             }}
             variant={"destructive"}
           >
