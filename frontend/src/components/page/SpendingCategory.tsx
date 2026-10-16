@@ -127,7 +127,6 @@ export function SpendingCategory() {
 
             {chartData.map((item) => {
               const percentage = (item.spend / total) * 100;
-              console.log(item.fill);
 
               return (
                 <div

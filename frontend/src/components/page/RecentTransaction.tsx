@@ -39,7 +39,7 @@ const RecentTransaction = () => {
       </CardHeader>
       <CardContent>
         <div className="h-full overflow-y-auto">
-          <Table>
+          <Table aria-label="recent transation table">
             <TableHeader>
               <TableHead isRowHeader className="w-25">
                 Title

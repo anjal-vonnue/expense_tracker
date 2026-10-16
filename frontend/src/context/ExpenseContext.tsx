@@ -42,8 +42,6 @@ export function ExpenseProvider({ children }: { children: React.ReactNode }) {
       try {
         const data = await meApi(savedToken);
 
-        console.log("data from context: ", data);
-
         setToken(savedToken);
         setUser(data.data);
       } catch (error) {

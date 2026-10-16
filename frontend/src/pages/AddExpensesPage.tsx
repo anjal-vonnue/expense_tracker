@@ -112,6 +112,7 @@ const AddExpensesPage = () => {
               <FieldLabel htmlFor="expense-category">Category</FieldLabel>
 
               <Select
+                aria-label="category selection"
                 id="expense-category"
                 placeholder="Select a fruit"
                 className="bg-white w-full"

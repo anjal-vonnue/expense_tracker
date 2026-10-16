@@ -109,6 +109,7 @@ const ExpensesPage = () => {
               <FieldLabel htmlFor="expense-category">Category</FieldLabel>
 
               <Select
+                aria-label="category selection"
                 id="expense-category"
                 className="bg-white w-full"
                 value={category}
@@ -135,6 +136,7 @@ const ExpensesPage = () => {
             </Field>
             <Field orientation="horizontal" className="items-end w-fit">
               <Button
+                type="reset"
                 variant="outline"
                 onClick={() => {
                   setSearchHook("");
@@ -161,7 +163,7 @@ const ExpensesPage = () => {
             </div>
           ) : (
             <>
-              <Table>
+              <Table aria-label="expense-table">
                 <TableHeader>
                   <TableHead isRowHeader className="w-25">
                     Title
