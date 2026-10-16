@@ -1,5 +1,6 @@
 import DeleteDialog from "@/components/DeleteDialog";
 import EditDialog from "@/components/EditDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +16,6 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -46,6 +46,8 @@ const ExpensesPage = () => {
     expenses,
     pagination,
     isLoading,
+    pageSize,
+    setPageSize,
     setPage,
     retry,
     setSearch: setSearchHook,
@@ -64,6 +66,8 @@ const ExpensesPage = () => {
     { label: "Entertainment", value: "entertainment" },
     { label: "Others", value: "others" },
   ];
+
+  const pageSizeArray = [10, 15, 20, 25, 50];
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -213,6 +217,11 @@ const ExpensesPage = () => {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
+              <Badge variant="outline" className="p-4">
+                {pagination?.page}/{pagination?.totalPages}
+              </Badge>
+            </PaginationItem>
+            <PaginationItem>
               <PaginationPrevious
                 onClick={(e) => {
                   e.preventDefault();
@@ -225,22 +234,7 @@ const ExpensesPage = () => {
                 }
               />
             </PaginationItem>
-            {Array.from(
-              { length: pagination?.totalPages! },
-              (_, i) => i + 1,
-            ).map((pageNumber) => (
-              <PaginationItem key={pageNumber}>
-                <PaginationLink
-                  isActive={pagination?.page! === pageNumber}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setPage(pageNumber);
-                  }}
-                >
-                  {pageNumber}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
+
             <PaginationItem>
               <PaginationNext
                 onClick={(e) => {
@@ -258,6 +252,35 @@ const ExpensesPage = () => {
                     : ""
                 }
               />
+            </PaginationItem>
+            <PaginationItem>
+              {" "}
+              <Select
+                aria-label="row size selection"
+                id="expense-category"
+                placeholder={"row"}
+                className="bg-white w-full"
+                value={pageSize}
+                onChange={(value) => {
+                  if (typeof value === "number") {
+                    setPageSize(value);
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>select row size</SelectLabel>
+                    {pageSizeArray.map((item) => (
+                      <SelectItem key={item} id={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </PaginationItem>
           </PaginationContent>
         </Pagination>

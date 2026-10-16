@@ -103,9 +103,11 @@ export default function useGetExpenses() {
     error,
     page,
     pagination,
+    pageSize,
     setPage,
     setCategory,
     setSearch,
     retry,
+    setPageSize,
   };
 }
