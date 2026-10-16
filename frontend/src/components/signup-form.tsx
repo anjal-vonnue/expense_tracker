@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { useExpense } from "@/context/ExpenseContext";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { Spinner } from "./ui/spinner";
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [name, setName] = useState<string>("");
@@ -23,7 +24,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [password, setPassword] = useState<string>("");
   const [confirmPass, setConfirmPass] = useState<string>("");
 
-  const { register, isLoading } = useExpense();
+  const { error, isLoading, setErrorFn, register } = useExpense();
   const navigate = useNavigate();
 
   const handleSumbit = async (e: React.SubmitEvent) => {
@@ -68,6 +69,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
+                  setErrorFn(null);
                 }}
               />
             </Field>
@@ -81,6 +83,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
+                  setErrorFn(null);
                 }}
               />
             </Field>
@@ -93,6 +96,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
+                  setErrorFn(null);
                 }}
               />
               <FieldDescription>
@@ -110,14 +114,25 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={confirmPass}
                 onChange={(e) => {
                   setConfirmPass(e.target.value);
+                  setErrorFn(null);
                 }}
               />
               <FieldDescription>Please confirm your password.</FieldDescription>
             </Field>
             <FieldGroup>
               <Field>
+                {error && (
+                  <p className="text-center pt-5 text-red-500">{error}</p>
+                )}
                 <Button type="submit">
-                  {isLoading ? "Loading..." : "Create Account"}
+                  {isLoading ? (
+                    <div className="flex items-center gap-3">
+                      <Spinner />
+                      loading...
+                    </div>
+                  ) : (
+                    "Create Account"
+                  )}
                 </Button>
                 <FieldDescription className="px-6 text-center">
                   Already have an account? <Link to={"/login"}>Sign in</Link>

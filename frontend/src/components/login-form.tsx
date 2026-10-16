@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useExpense } from "@/context/ExpenseContext";
+import { Spinner } from "./ui/spinner";
 
 export function LoginForm({
   className,
@@ -27,7 +28,7 @@ export function LoginForm({
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
-  const { login, isLoading } = useExpense();
+  const { isLoading, error, setErrorFn, login } = useExpense();
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -70,6 +71,7 @@ export function LoginForm({
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
+                    setErrorFn(null);
                   }}
                 />
               </Field>
@@ -84,12 +86,24 @@ export function LoginForm({
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
+                    setErrorFn(null);
                   }}
                 />
               </Field>
               <Field>
+                {error && (
+                  <p className="text-center pt-5 text-red-500">{error}</p>
+                )}
+
                 <Button type="submit">
-                  {isLoading ? "loading..." : "Login"}
+                  {isLoading ? (
+                    <div className="flex items-center gap-3">
+                      <Spinner />
+                      loading...
+                    </div>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}
