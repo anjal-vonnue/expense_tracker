@@ -15,6 +15,8 @@ type ExpenseContextType = {
   token: string | null;
   isLoading: boolean;
   error: string | null;
+  registerError: string | null;
+  setRegisterError: (error: string | null) => void;
   setErrorFn: (error: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
@@ -28,6 +30,7 @@ export function ExpenseProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [registerError, setRegisterError] = useState<string | null>(null);
 
   useEffect(() => {
     async function checkAuth() {
@@ -93,10 +96,11 @@ export function ExpenseProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.log(error);
       if (error instanceof Error) {
-        setError(error.message);
+        setRegisterError(error.message);
       } else {
-        setError("unable to login");
+        setRegisterError("unable to login");
       }
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -123,6 +127,8 @@ export function ExpenseProvider({ children }: { children: React.ReactNode }) {
         token,
         isLoading,
         error,
+        registerError,
+        setRegisterError,
         setErrorFn,
         login,
         register,

@@ -23,8 +23,10 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPass, setConfirmPass] = useState<string>("");
+  const [passError, setPassError] = useState<string | null>("");
+  const [confirmPassError, setConfirmPassError] = useState<string | null>(null);
 
-  const { error, isLoading, setErrorFn, register } = useExpense();
+  const { isLoading, register, registerError, setRegisterError } = useExpense();
   const navigate = useNavigate();
 
   const handleSumbit = async (e: React.SubmitEvent) => {
@@ -39,8 +41,24 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
 
     console.log("signup data: ", data);
 
+    if (password.trim()) {
+      if (password.trim().length < 8) {
+        setPassError("Must be at least 8 characters long.");
+        return;
+      }
+    }
+
+    if (password.trim() !== confirmPass.trim()) {
+      setConfirmPassError("password must be equal");
+      return;
+    }
+
     try {
+      console.log("above register");
+
       await register(data.name, data.email, data.confirmPass);
+      console.log("below register");
+
       navigate("/");
       console.log("naviage below");
     } catch (error) {
@@ -69,7 +87,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
-                  setErrorFn(null);
+                  setRegisterError(null);
                 }}
               />
             </Field>
@@ -83,7 +101,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  setErrorFn(null);
+                  setRegisterError(null);
                 }}
               />
             </Field>
@@ -96,11 +114,12 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  setErrorFn(null);
+                  setRegisterError(null);
+                  setConfirmPassError(null);
                 }}
               />
-              <FieldDescription>
-                Must be at least 8 characters long.
+              <FieldDescription className={passError ? "text-red-500" : ""}>
+                {passError ? passError : "Must be at least 8 characters long."}
               </FieldDescription>
             </Field>
             <Field>
@@ -114,15 +133,24 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={confirmPass}
                 onChange={(e) => {
                   setConfirmPass(e.target.value);
-                  setErrorFn(null);
+                  setRegisterError(null);
+                  setConfirmPassError(null);
                 }}
               />
-              <FieldDescription>Please confirm your password.</FieldDescription>
+              <FieldDescription
+                className={confirmPassError ? "text-red-500" : ""}
+              >
+                {confirmPassError
+                  ? confirmPassError
+                  : "Please confirm your password."}
+              </FieldDescription>
             </Field>
             <FieldGroup>
               <Field>
-                {error && (
-                  <p className="text-center pt-5 text-red-500">{error}</p>
+                {registerError && (
+                  <p className="text-center pt-5 text-red-500">
+                    {registerError}
+                  </p>
                 )}
                 <Button type="submit">
                   {isLoading ? (
