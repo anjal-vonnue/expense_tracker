@@ -1,7 +1,9 @@
 import DeleteDialog from "@/components/DeleteDialog";
 import EditDialog from "@/components/EditDialog";
+import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -9,14 +11,29 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
@@ -28,11 +45,40 @@ import {
 } from "@/components/ui/table";
 import { useExpenseRange } from "@/context/ExpenseRangeContext";
 import useGetExpenses from "@/hooks/useGetExpenses";
+import { useState } from "react";
 
 const ExpensesPage = () => {
-  const { expenses, pagination, isLoading, setPage, retry } = useGetExpenses();
+  const {
+    expenses,
+    pagination,
+    isLoading,
+    setPage,
+    retry,
+    setSearch: setSearchHook,
+    setCategory: setCategoryHook,
+  } = useGetExpenses();
+  const [category, setCategory] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+
   const { retry: contextRetry } = useExpenseRange();
-  console.log(pagination);
+
+  const categories = [
+    { label: "Food", value: "food" },
+    { label: "Transport", value: "transport" },
+    { label: "Shopping", value: "shopping" },
+    { label: "Bills", value: "bills" },
+    { label: "Entertainment", value: "entertainment" },
+    { label: "Others", value: "others" },
+  ];
+
+  const handleSubmit = (e: React.SubmitEvent) => {
+    e.preventDefault();
+    console.log("category: ", category);
+
+    console.log("search: ", search);
+    setSearchHook(search);
+    setCategoryHook(category);
+  };
 
   return (
     <Card className="flex min-h-0 flex-1 flex-col overflow-hidden bg-muted/50">
@@ -41,12 +87,77 @@ const ExpensesPage = () => {
         <CardDescription>
           This is your expenses for the recent month
         </CardDescription>
+
+        <form
+          className="flex justify-center items-center"
+          onSubmit={handleSubmit}
+        >
+          <FieldGroup className="flex flex-row ">
+            <Field>
+              <FieldLabel htmlFor="input-demo-api-key">Search</FieldLabel>
+              <Input
+                id="input-demo-api-key"
+                placeholder=""
+                className="bg-white"
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+              />
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="expense-category">Category</FieldLabel>
+
+              <Select
+                id="expense-category"
+                className="bg-white w-full"
+                value={category}
+                onChange={(value) => {
+                  if (typeof value === "string") {
+                    setCategory(value);
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Categories</SelectLabel>
+                    {categories.map((item) => (
+                      <SelectItem key={item.value} id={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field orientation="horizontal" className="items-end w-fit">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearchHook("");
+                  setCategoryHook("");
+                }}
+              >
+                Reset
+              </Button>
+              <Button type="submit">Submit</Button>
+            </Field>
+          </FieldGroup>
+        </form>
       </CardHeader>
-      <CardContent className="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <CardContent className="flex min-h-0 flex-1 flex-col overflow-hidden ">
         <div className="min-h-0 flex-1 overflow-y-auto">
           {isLoading ? (
             <div className="w-full h-full flex items-center justify-center gap-4">
               <Spinner />
+              loading expenses...
+            </div>
+          ) : expenses.length === 0 ? (
+            <div className="flex justify-center items-center h-full">
+              <p className="text-2xl font-bold text-red-400">No Result Found</p>
             </div>
           ) : (
             <>
