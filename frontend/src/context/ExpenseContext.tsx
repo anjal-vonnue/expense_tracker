@@ -1,4 +1,5 @@
 import { loginApi } from "@/api/login";
+import { meApi } from "@/api/me";
 import { registerApi } from "@/api/register";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -29,15 +30,33 @@ export function ExpenseProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("expense-user");
-    const savedToken = localStorage.getItem("expense-token");
+    async function checkAuth() {
+      const savedUser = localStorage.getItem("expense-user");
+      const savedToken = localStorage.getItem("expense-token");
 
-    if (savedUser && savedToken) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+      if (!savedUser || !savedToken) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const data = await meApi(savedToken);
+
+        console.log("data from context: ", data);
+
+        setToken(savedToken);
+        setUser(data.data);
+      } catch (error) {
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem("expense-user");
+        localStorage.removeItem("expense-token");
+      } finally {
+        setIsLoading(false);
+      }
     }
 
-    setIsLoading(false);
+    checkAuth();
   }, []);
 
   async function login(email: string, password: string) {
