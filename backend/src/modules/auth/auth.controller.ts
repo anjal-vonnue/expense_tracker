@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as authServices from "./auth.service.js";
+import type { AuthRequest } from "./auth.middleware.js";
 
 export async function registerHandler(req: Request, res: Response) {
   try {
@@ -36,6 +37,19 @@ export async function loginHandler(req: Request, res: Response) {
 
     if (error instanceof Error && error.message === "INVALID") {
       return res.status(400).json({ error: "invalid email or password" });
+    }
+
+    return res.status(500).json({ error: "internal server error" });
+  }
+}
+
+export async function meHandler(req: AuthRequest, res: Response) {
+  try {
+    const result = await authServices.whoami(Number(req.userId));
+    return res.status(200).json({ data: result });
+  } catch (error) {
+    if (error instanceof Error && error.message === "NOT_FOUND") {
+      return res.status(400).json({ error: "user not found" });
     }
 
     return res.status(500).json({ error: "internal server error" });

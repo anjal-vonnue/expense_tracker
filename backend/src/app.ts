@@ -10,6 +10,10 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
+app.get("/", (req, res) => {
+  res.send("hello");
+});
+
 app.use("/auth", authRouter);
 app.use("/expenses", expenseRouter);
 

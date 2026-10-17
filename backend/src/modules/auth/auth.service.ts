@@ -67,3 +67,20 @@ export async function login(email: string, password: string) {
 
   return { user, token };
 }
+
+export async function whoami(id: number) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    omit: {
+      passwordHash: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("NOT_FOUND");
+  }
+
+  return user;
+}
