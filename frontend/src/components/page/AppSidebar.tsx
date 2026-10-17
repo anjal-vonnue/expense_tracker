@@ -82,14 +82,9 @@ const AppSidebar = () => {
       <SidebarFooter>
         <SidebarMenu className="flex flex-col justify-center">
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Link
-                to="/profile"
-                className="flex w-full justify-center items-center gap-2 px-2 py-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-              >
-                <User2 />
-                <span>{user?.name}</span>
-              </Link>
+            <SidebarMenuButton className="flex w-full justify-center border items-center bg-amber-100/50 gap-2 px-2 py-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+              <User2 />
+              <span>{user?.name}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           {user?.name && (

@@ -19,11 +19,13 @@ import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useExpense } from "@/context/ExpenseContext";
 import { Spinner } from "./ui/spinner";
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  useDocumentTitle("Login | Expense Tracker");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();

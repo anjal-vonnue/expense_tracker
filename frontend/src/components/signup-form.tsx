@@ -17,8 +17,11 @@ import { useExpense } from "@/context/ExpenseContext";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Spinner } from "./ui/spinner";
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  useDocumentTitle("Sign Up | Expense Tracker");
+
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

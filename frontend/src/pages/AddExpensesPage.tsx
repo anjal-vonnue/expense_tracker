@@ -22,11 +22,14 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { useCreateExpense } from "@/hooks/useCreateExpense";
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 import { getLocalTimeZone, type CalendarDate } from "@internationalized/date";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
 const AddExpensesPage = () => {
+  useDocumentTitle("Add Expenses | Expense Tracker");
+
   const [date, setDate] = useState<CalendarDate | null>(null);
   const [dateError, setDateError] = useState<boolean>(false);
 

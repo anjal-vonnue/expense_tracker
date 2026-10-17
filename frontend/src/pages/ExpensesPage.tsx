@@ -33,9 +33,12 @@ import {
   TableHeader,
 } from "@/components/ui/table";
 import { useExpenseRange } from "@/context/ExpenseRangeContext";
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 import useGetExpenses from "@/hooks/useGetExpenses";
 
 const ExpensesPage = () => {
+  useDocumentTitle("Expenses | Expense Tracker");
+
   const {
     expenses,
     pagination,
