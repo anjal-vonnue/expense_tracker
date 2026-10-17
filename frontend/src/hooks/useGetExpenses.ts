@@ -83,7 +83,9 @@ export default function useGetExpenses() {
           setError(new Error("failed to fetch recent expenses"));
         }
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     };
     fetchRecent();

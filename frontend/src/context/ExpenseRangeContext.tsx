@@ -85,8 +85,6 @@ export function ExpenseRangeProvider({
 
         setExpenses(result.data);
       } catch (error) {
-        console.log(error);
-
         if (error instanceof DOMException && error.name === "AbortError") {
           return;
         }
