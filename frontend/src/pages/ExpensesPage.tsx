@@ -41,6 +41,7 @@ const ExpensesPage = () => {
     pagination,
     isLoading,
     pageSize,
+    error,
     setPageSize,
     setPage,
     retry,
@@ -71,13 +72,20 @@ const ExpensesPage = () => {
       <CardContent className="flex min-h-0 flex-1 flex-col overflow-hidden ">
         <div className="min-h-0 flex-1 overflow-y-auto">
           {isLoading ? (
-            <div className="w-full h-full flex items-center justify-center gap-4">
+            <div className="flex h-full w-full items-center justify-center gap-4">
               <Spinner />
-              loading expenses...
+              Loading expenses...
+            </div>
+          ) : error ? (
+            <div className="flex h-full items-center justify-center gap-4">
+              <p className="text-red-500">{error.message}</p>
+              <button onClick={retry}>Retry</button>
             </div>
           ) : expenses.length === 0 ? (
-            <div className="flex justify-center items-center h-full">
-              <p className="text-2xl font-bold text-red-400">No Result Found</p>
+            <div className="flex h-full items-center justify-center">
+              <p className="text-2xl font-bold text-red-400">
+                No expenses found
+              </p>
             </div>
           ) : (
             <>
