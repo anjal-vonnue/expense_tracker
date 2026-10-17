@@ -1,8 +1,9 @@
 import { memo } from "react";
 import { TableCell, TableRow } from "./ui/table";
 import EditDialog from "./EditDialog";
-import DeleteDialog from "./DeleteDialog";
+
 import type { ExpenseType } from "@/hooks/useRecent";
+import DeleteDialog from "./DeleteDialog";
 
 const ExpenseRow = memo(function ExpenseRow({
   expense,
