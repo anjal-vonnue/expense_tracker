@@ -1,9 +1,6 @@
-import DeleteDialog from "@/components/DeleteDialog";
-import EditDialog from "@/components/EditDialog";
 import ExpenseRow from "@/components/ExpenseRow";
 import ExpenseSearch from "@/components/ExpenseSearch";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,8 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
@@ -34,14 +29,11 @@ import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
-  TableRow,
 } from "@/components/ui/table";
 import { useExpenseRange } from "@/context/ExpenseRangeContext";
 import useGetExpenses from "@/hooks/useGetExpenses";
-import { useState } from "react";
 
 const ExpensesPage = () => {
   const {
