@@ -29,6 +29,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
+import { ModeToggle } from "../mode-toggle";
 
 const AppSidebar = () => {
   const { user, logout } = useExpense();
@@ -82,7 +83,7 @@ const AppSidebar = () => {
       <SidebarFooter>
         <SidebarMenu className="flex flex-col justify-center">
           <SidebarMenuItem>
-            <SidebarMenuButton className="flex w-full justify-center border items-center bg-amber-100/50 gap-2 px-2 py-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+            <SidebarMenuButton className="flex w-full justify-center items-center bg-primary gap-2 px-2 py-2 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground mb-0.5">
               <User2 />
               <span>{user?.name}</span>
             </SidebarMenuButton>
@@ -115,6 +116,9 @@ const AppSidebar = () => {
               </AlertDialogTrigger>
             </SidebarMenuItem>
           )}
+          <SidebarMenuItem>
+            <ModeToggle />
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

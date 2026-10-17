@@ -130,7 +130,7 @@ const EditDialog = ({
               <Select
                 id="expense-category"
                 placeholder="Select a Category"
-                className="bg-white w-full"
+                className="w-full"
                 value={editCategory}
                 onChange={(value) => {
                   if (typeof value === "string") {
@@ -138,12 +138,14 @@ const EditDialog = ({
                   }
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full bg-background text-foreground border-input">
                   <SelectValue />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Categories</SelectLabel>
+
                     {categories.map((item) => (
                       <SelectItem key={item.value} id={item.value}>
                         {item.label}

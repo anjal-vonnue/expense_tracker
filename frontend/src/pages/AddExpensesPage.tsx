@@ -120,7 +120,7 @@ const AddExpensesPage = () => {
                 aria-label="category selection"
                 id="expense-category"
                 placeholder="Select a fruit"
-                className="bg-white w-full"
+                className="w-full"
                 value={category}
                 onChange={(value) => {
                   if (typeof value === "string") {
@@ -129,7 +129,7 @@ const AddExpensesPage = () => {
                   }
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full bg-background text-foreground border-input">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

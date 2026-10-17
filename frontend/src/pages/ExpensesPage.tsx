@@ -163,7 +163,7 @@ const ExpensesPage = () => {
                 aria-label="row size selection"
                 id="expense-category"
                 placeholder={"row"}
-                className="bg-white w-full"
+                className="w-full"
                 value={pageSize}
                 onChange={(value) => {
                   if (typeof value === "number") {
@@ -171,7 +171,7 @@ const ExpensesPage = () => {
                   }
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full bg-background text-foreground border-input">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

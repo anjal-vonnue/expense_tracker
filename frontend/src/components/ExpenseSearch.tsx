@@ -50,9 +50,10 @@ export default function ExpenseSearch({ onSubmit }: Props) {
           <FieldLabel htmlFor="expense-category">Category</FieldLabel>
 
           <Select
+            placeholder="Select a category"
             aria-label="category selection"
             id="expense-category"
-            className="bg-white w-full"
+            className="w-full"
             value={category}
             onChange={(value) => {
               if (typeof value === "string") {
@@ -60,7 +61,7 @@ export default function ExpenseSearch({ onSubmit }: Props) {
               }
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger className="w-full bg-background text-foreground border-input">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
