@@ -10,9 +10,10 @@ import {
 import { useExpenseRange } from "@/context/ExpenseRangeContext";
 
 import { ArrowLeftRight, TrendingUp } from "lucide-react";
+import { Spinner } from "../ui/spinner";
 
 const TotalTransactions = () => {
-  const { transactionCount } = useExpenseRange();
+  const { transactionCount, isLoading } = useExpenseRange();
 
   return (
     <Card className="flex lg:aspect-video flex-col bg-blue-50 md:h-80 w-full">
@@ -34,7 +35,13 @@ const TotalTransactions = () => {
 
       <CardContent className="flex-1">
         <h1 className="text-4xl font-bold tracking-tight text-blue-950">
-          {transactionCount}
+          {isLoading ? (
+            <>
+              <Spinner />
+            </>
+          ) : (
+            `₹${transactionCount}`
+          )}{" "}
         </h1>
         <p className="mt-1 text-sm text-blue-800/70">
           Total transactions this month

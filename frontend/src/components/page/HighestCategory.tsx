@@ -10,9 +10,10 @@ import {
 import { useExpenseRange } from "@/context/ExpenseRangeContext";
 
 import { ChartNoAxesCombined, TrendingUp } from "lucide-react";
+import { Spinner } from "../ui/spinner";
 
 const HighestCategory = () => {
-  const { total, highestPaid } = useExpenseRange();
+  const { total, highestPaid, isLoading } = useExpenseRange();
 
   return (
     <Card className="flex lg:aspect-video flex-col bg-purple-50 md:h-80 w-full">
@@ -34,7 +35,13 @@ const HighestCategory = () => {
 
       <CardContent className="flex-1">
         <h1 className="text-4xl font-bold tracking-tight text-purple-950">
-          {highestPaid?.category}
+          {isLoading ? (
+            <>
+              <Spinner />
+            </>
+          ) : (
+            <>{highestPaid?.category}</>
+          )}
         </h1>
         <p className="mt-1 text-sm text-purple-800/70">
           Your highest expense category
@@ -43,11 +50,17 @@ const HighestCategory = () => {
 
       <CardFooter className="mt-auto flex items-center gap-2 border-t border-purple-200 pt-4 text-sm text-purple-700">
         <TrendingUp className="h-4 w-4" />
-        <span className="font-medium">
-          ₹{highestPaid?.spend} (
-          {((Number(highestPaid?.spend) * 100) / total).toFixed(1)}% of total
-          expenses)
-        </span>
+        {isLoading ? (
+          <>
+            <Spinner />
+          </>
+        ) : (
+          <span className="font-medium">
+            ₹{highestPaid?.spend} (
+            {((Number(highestPaid?.spend) * 100) / total).toFixed(1)}% of total
+            expenses)
+          </span>
+        )}
       </CardFooter>
     </Card>
   );
