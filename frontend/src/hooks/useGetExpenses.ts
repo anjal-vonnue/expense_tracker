@@ -26,7 +26,7 @@ export default function useGetExpenses() {
   const [error, setError] = useState<Error | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const { token } = useExpense();
-  const [pageSize, setPageSize] = useState<number>(14);
+  const [pageSize, setPageSize] = useState<number>(13);
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
   const [category, setCategory] = useState<string>("");

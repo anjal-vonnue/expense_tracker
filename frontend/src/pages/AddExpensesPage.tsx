@@ -30,7 +30,7 @@ const AddExpensesPage = () => {
   const [date, setDate] = useState<CalendarDate | null>(null);
   const [dateError, setDateError] = useState<boolean>(false);
 
-  const { createExpense, isPending, error } = useCreateExpense();
+  const { isPending, error, createExpense, setError } = useCreateExpense();
   const navigate = useNavigate();
 
   const categories = [
@@ -90,6 +90,7 @@ const AddExpensesPage = () => {
                 value={title}
                 onChange={(e) => {
                   setTitle(e.target.value);
+                  setError(null);
                 }}
                 className="bg-white"
               />
@@ -104,6 +105,7 @@ const AddExpensesPage = () => {
                 value={amount}
                 onChange={(e) => {
                   setAmount(e.target.value);
+                  setError(null);
                 }}
                 className="bg-white"
               />
@@ -120,6 +122,7 @@ const AddExpensesPage = () => {
                 onChange={(value) => {
                   if (typeof value === "string") {
                     setCategory(value);
+                    setError(null);
                   }
                 }}
               >

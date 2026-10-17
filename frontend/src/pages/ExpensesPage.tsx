@@ -1,5 +1,7 @@
 import DeleteDialog from "@/components/DeleteDialog";
 import EditDialog from "@/components/EditDialog";
+import ExpenseRow from "@/components/ExpenseRow";
+import ExpenseSearch from "@/components/ExpenseSearch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,29 +55,15 @@ const ExpensesPage = () => {
     setSearch: setSearchHook,
     setCategory: setCategoryHook,
   } = useGetExpenses();
-  const [category, setCategory] = useState<string>("");
-  const [search, setSearch] = useState<string>("");
 
   const { retry: contextRetry } = useExpenseRange();
 
-  const categories = [
-    { label: "Food", value: "food" },
-    { label: "Transport", value: "transport" },
-    { label: "Shopping", value: "shopping" },
-    { label: "Bills", value: "bills" },
-    { label: "Entertainment", value: "entertainment" },
-    { label: "Others", value: "others" },
-  ];
-
   const pageSizeArray = [10, 15, 20, 25, 50];
 
-  const handleSubmit = (e: React.SubmitEvent) => {
-    e.preventDefault();
-    console.log("category: ", category);
-
-    console.log("search: ", search);
+  const handleSearch = (search: string, category: string) => {
     setSearchHook(search);
     setCategoryHook(category);
+    setPage(1);
   };
 
   return (
@@ -86,67 +74,7 @@ const ExpensesPage = () => {
           This is your expenses for the recent month
         </CardDescription>
 
-        <form
-          className="flex justify-center items-center"
-          onSubmit={handleSubmit}
-        >
-          <FieldGroup className="flex flex-row ">
-            <Field>
-              <FieldLabel htmlFor="input-demo-api-key">Search</FieldLabel>
-              <Input
-                id="input-demo-api-key"
-                placeholder=""
-                className="bg-white"
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                }}
-              />
-            </Field>
-
-            <Field>
-              <FieldLabel htmlFor="expense-category">Category</FieldLabel>
-
-              <Select
-                aria-label="category selection"
-                id="expense-category"
-                className="bg-white w-full"
-                value={category}
-                onChange={(value) => {
-                  if (typeof value === "string") {
-                    setCategory(value);
-                  }
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Categories</SelectLabel>
-                    {categories.map((item) => (
-                      <SelectItem key={item.value} id={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </Field>
-            <Field orientation="horizontal" className="items-end w-fit">
-              <Button
-                type="reset"
-                variant="outline"
-                onClick={() => {
-                  setSearchHook("");
-                  setCategoryHook("");
-                }}
-              >
-                Reset
-              </Button>
-              <Button type="submit">Submit</Button>
-            </Field>
-          </FieldGroup>
-        </form>
+        <ExpenseSearch onSubmit={handleSearch} />
       </CardHeader>
       <CardContent className="flex min-h-0 flex-1 flex-col overflow-hidden ">
         <div className="min-h-0 flex-1 overflow-y-auto">
@@ -173,39 +101,12 @@ const ExpensesPage = () => {
                 </TableHeader>
                 <TableBody>
                   {expenses.map((expense) => (
-                    <TableRow key={expense.id}>
-                      <TableCell className="font-medium">
-                        {expense.title}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {expense.category}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {Number(expense.amount).toLocaleString("en-IN", {
-                          style: "currency",
-                          currency: "INR",
-                        })}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {expense.expenseDate.split("T")[0]}
-                      </TableCell>
-                      <TableCell className="flex justify-end ">
-                        <EditDialog
-                          id={expense.id}
-                          title={expense.title}
-                          category={expense.category}
-                          amount={Number(expense.amount)}
-                          date={expense.expenseDate.split("T")[0]}
-                          retry={retry}
-                          contextRetry={contextRetry}
-                        />
-                        <DeleteDialog
-                          expenseId={expense.id}
-                          retry={retry}
-                          contextRetry={contextRetry}
-                        />
-                      </TableCell>
-                    </TableRow>
+                    <ExpenseRow
+                      key={expense.id}
+                      expense={expense}
+                      retry={retry}
+                      contextRetry={contextRetry}
+                    />
                   ))}
                 </TableBody>
               </Table>

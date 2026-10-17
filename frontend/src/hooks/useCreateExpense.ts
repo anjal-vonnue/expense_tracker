@@ -47,9 +47,10 @@ export function useCreateExpense() {
   };
 
   return {
-    createExpense,
     data,
     isPending,
     error,
+    createExpense,
+    setError,
   };
 }
