@@ -109,7 +109,14 @@ export function LoginForm({
                 </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}
-                  <Link to={"/signup"}>Sign up</Link>
+                  <Link
+                    to={"/signup"}
+                    onClick={() => {
+                      setErrorFn(null);
+                    }}
+                  >
+                    Sign up
+                  </Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

@@ -118,6 +118,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setRegisterError(null);
+                  setPassError(null);
                   setConfirmPassError(null);
                 }}
               />
