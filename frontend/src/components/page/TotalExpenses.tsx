@@ -13,7 +13,7 @@ import { TrendingUp, Wallet } from "lucide-react";
 import { Spinner } from "../ui/spinner";
 
 export const TotalExpenses = () => {
-  const { total, isLoading } = useExpenseRange();
+  const { total, isLoading, expenseChange } = useExpenseRange();
 
   const hasExpenses = Number(total) > 0;
 
@@ -69,7 +69,9 @@ export const TotalExpenses = () => {
         ) : hasExpenses ? (
           <>
             <TrendingUp className="h-4 w-4 shrink-0" />
-            <span className="font-medium">12% from last month</span>
+            <span className="font-medium">
+              {expenseChange.toFixed(1)}% from previous 30 days
+            </span>
           </>
         ) : (
           <span className="text-green-800/60">

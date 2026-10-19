@@ -13,7 +13,7 @@ import { ArrowLeftRight, TrendingUp } from "lucide-react";
 import { Spinner } from "../ui/spinner";
 
 const TotalTransactions = () => {
-  const { transactionCount, isLoading } = useExpenseRange();
+  const { transactionCount, isLoading, transactionChange } = useExpenseRange();
 
   const hasTransactions = Number(transactionCount) > 0;
 
@@ -68,7 +68,9 @@ const TotalTransactions = () => {
         ) : hasTransactions ? (
           <>
             <TrendingUp className="h-4 w-4 shrink-0" />
-            <span className="font-medium">12% from last month</span>
+            <span className="font-medium">
+              {transactionChange.toFixed(1)}% from previous 30 days
+            </span>
           </>
         ) : (
           <span className="text-blue-800/60">

@@ -12,6 +12,8 @@ type ExpenseRangeContextType = {
   highestPaid: ChartData | null;
   isLoading: boolean;
   error: Error | null;
+  expenseChange: number;
+  transactionChange: number;
   retry: () => void;
   setDateRange: (range: string[]) => void;
 };
@@ -35,6 +37,11 @@ export function ExpenseRangeProvider({
     return `${year}-${month}-${day}`;
   };
 
+  const shiftDays = (value: string, days: number) => {
+    const [y, m, d] = value.split("-").map((number) => Number(number));
+    return formatDate(new Date(y, m - 1, d + days));
+  };
+
   const today = new Date();
 
   const [dateRange, setDateRange] = useState<string[]>([
@@ -43,6 +50,7 @@ export function ExpenseRangeProvider({
   ]);
 
   const [expenses, setExpenses] = useState<ExpenseType[]>([]);
+  const [preExpenses, setPreExpenses] = useState<ExpenseType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -50,6 +58,7 @@ export function ExpenseRangeProvider({
   useEffect(() => {
     if (!token || dateRange.length !== 2) {
       setExpenses([]);
+      setPreExpenses([]);
       setIsLoading(false);
       return;
     }
@@ -84,6 +93,30 @@ export function ExpenseRangeProvider({
         const result = await response.json();
 
         setExpenses(result.data);
+
+        const preParams = new URLSearchParams({
+          fromDate: shiftDays(dateRange[0], -30),
+          toDate: shiftDays(dateRange[0], -1),
+        });
+
+        const preResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/expenses/filter-by-date?${preParams}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            signal: controller.signal,
+          },
+        );
+
+        if (!preResponse.ok) {
+          throw new Error("failed to fetch expenses in that range");
+        }
+
+        const preResult = await preResponse.json();
+
+        setPreExpenses(preResult.data);
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") {
           return;
@@ -137,6 +170,11 @@ export function ExpenseRangeProvider({
     }
   });
 
+  let preTotal = 0;
+  preExpenses.forEach((item) => {
+    preTotal += Number(item.amount) || 0;
+  });
+
   const highestPaid = category
     .filter((item) => item.spend > 0)
     .sort((a, b) => b.spend - a.spend)[0];
@@ -144,6 +182,19 @@ export function ExpenseRangeProvider({
   const retry = () => {
     setRetryCount((prev) => prev + 1);
   };
+
+  function percentageChange(current: number, previous: number) {
+    return previous === 0 ? 0 : ((current - previous) / previous) * 100;
+  }
+
+  const expenseChange = percentageChange(total, preTotal);
+  const transactionChange = percentageChange(
+    transactionCount,
+    preExpenses.length,
+  );
+
+  console.log("PRE TOTAL: ", preTotal);
+  console.log("PRE LENGTH: ", preExpenses.length);
 
   return (
     <ExpenseRangeContext.Provider
@@ -156,6 +207,8 @@ export function ExpenseRangeProvider({
         highestPaid,
         isLoading,
         error,
+        expenseChange,
+        transactionChange,
         retry,
         setDateRange,
       }}
