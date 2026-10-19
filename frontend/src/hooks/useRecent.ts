@@ -57,7 +57,9 @@ export default function useRecent() {
           setError(new Error("failed to fetch recent expenses"));
         }
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     };
     fetchRecent();

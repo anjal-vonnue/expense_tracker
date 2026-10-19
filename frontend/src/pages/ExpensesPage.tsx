@@ -131,8 +131,8 @@ const ExpensesPage = () => {
             </PaginationItem> */}
             <PaginationItem>
               <Select
-                aria-label="row size selection"
-                id="expense-category"
+                aria-label="page number selection"
+                id="page-number"
                 placeholder={`${pagination?.page ? pagination.page : 0}/${pagination?.totalPages ? pagination.totalPages : 0}`}
                 className="w-full"
                 value={pageSize}
@@ -200,6 +200,7 @@ const ExpensesPage = () => {
                 onChange={(value) => {
                   if (typeof value === "number") {
                     setPageSize(value);
+                    setPage(1);
                   }
                 }}
               >
