@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -17,19 +12,10 @@ model User {
   name         String    @db.VarChar(100)
   email        String    @unique @db.VarChar(200)
   passwordHash String    @map("password_hash")
-  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
   expenses     Expense[]
 
   @@map("users")
-}
-
-enum CategoryType {
-  food
-  transport
-  shopping
-  bills
-  entertainment
-  others
 }
 
 model Expense {
@@ -39,11 +25,19 @@ model Expense {
   category    CategoryType @default(others)
   notes       String?
   expenseDate DateTime     @default(now()) @map("expense_date") @db.Date
-  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamp()
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamp(6)
   userId      Int          @map("user_id")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("expenses")
+}
+
+enum CategoryType {
+  food
+  transport
+  shopping
+  bills
+  entertainment
+  others
 }
