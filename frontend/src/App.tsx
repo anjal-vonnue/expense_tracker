@@ -9,6 +9,7 @@ import { SignupForm } from "./components/signup-form";
 import LoginProtection from "./components/LoginProtection";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ExpenseRangeProvider } from "./context/ExpenseRangeContext";
+import SEO from "./components/seo";
 
 function App() {
   return (
@@ -16,8 +17,34 @@ function App() {
       <Routes>
         <Route element={<LoginProtection />}>
           <Route element={<AuthLayout />}>
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/signup" element={<SignupForm />} />
+            <Route
+              path="/login"
+              element={
+                <>
+                  <SEO
+                    title="Login | Expense Tracker"
+                    description="Welcome to the login page of Expense Tracker."
+                    name="Anjal K Biju"
+                    canonicalUrl="https://expensetrackerbyanjal.vercel.app/"
+                  />
+                  <LoginForm />
+                </>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <>
+                  <SEO
+                    title="Login | Expense Tracker"
+                    description="Welcome to the login page of Expense Tracker."
+                    name="Anjal K Biju"
+                    canonicalUrl="https://expensetrackerbyanjal.vercel.app/"
+                  />
+                  <SignupForm />
+                </>
+              }
+            />
           </Route>
         </Route>
         <Route element={<ProtectedRoute />}>
@@ -28,9 +55,48 @@ function App() {
               </ExpenseRangeProvider>
             }
           >
-            <Route index element={<Dashboard />} />
-            <Route path="expenses" element={<ExpensesPage />} />
-            <Route path="new" element={<AddExpensesPage />} />
+            <Route
+              index
+              element={
+                <>
+                  <SEO
+                    title="Dashboard | Expense Tracker"
+                    description="Welcome to the homepage of Expense Tracker."
+                    name="Anjal K Biju"
+                    canonicalUrl="https://expensetrackerbyanjal.vercel.app/"
+                  />
+                  <Dashboard />
+                </>
+              }
+            />
+            <Route
+              path="expenses"
+              element={
+                <>
+                  <SEO
+                    title="Expenses | Expense Tracker"
+                    description="List of all the expenses."
+                    name="Anjal K Biju"
+                    canonicalUrl="https://expensetrackerbyanjal.vercel.app/expenses"
+                  />
+                  <ExpensesPage />
+                </>
+              }
+            />
+            <Route
+              path="new"
+              element={
+                <>
+                  <SEO
+                    title="Add Expenses | Expense Tracker"
+                    description="You can create or Add new expenses here."
+                    name="Anjal K Biju"
+                    canonicalUrl="https://expensetrackerbyanjal.vercel.app/new"
+                  />
+                  <AddExpensesPage />
+                </>
+              }
+            />
           </Route>
         </Route>
       </Routes>
