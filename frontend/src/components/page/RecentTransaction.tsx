@@ -82,7 +82,20 @@ const RecentTransaction = () => {
             </div>
           </>
         )}
-        <TableCaption>A list of your recent expenses.</TableCaption>
+        <TableCaption>
+          {recent.length === 0 ? (
+            <>
+              <div className="flex flex-col gap-2">
+                <p>currently there are no expenses.</p>
+                <Button variant="link" onClick={() => navigate("/new")}>
+                  Create One?
+                </Button>
+              </div>
+            </>
+          ) : (
+            "A list of your recent expenses."
+          )}
+        </TableCaption>
       </CardContent>
     </Card>
   );
