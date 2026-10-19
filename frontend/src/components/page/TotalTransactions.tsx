@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { useExpenseRange } from "@/context/ExpenseRangeContext";
 
-import { ArrowLeftRight, TrendingUp } from "lucide-react";
+import { ArrowLeftRight, TrendingDown, TrendingUp } from "lucide-react";
 import { Spinner } from "../ui/spinner";
 
 const TotalTransactions = () => {
@@ -67,7 +67,11 @@ const TotalTransactions = () => {
           <Spinner />
         ) : hasTransactions ? (
           <>
-            <TrendingUp className="h-4 w-4 shrink-0" />
+            {transactionChange > 0 ? (
+              <TrendingUp className="h-4 w-4 shrink-0" />
+            ) : (
+              <TrendingDown className="h-4 w-4 shrink-0" />
+            )}
             <span className="font-medium">
               {transactionChange.toFixed(1)}% from previous 30 days
             </span>
