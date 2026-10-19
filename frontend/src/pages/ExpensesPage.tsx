@@ -55,6 +55,10 @@ const ExpensesPage = () => {
   const { retry: contextRetry } = useExpenseRange();
 
   const pageSizeArray = [10, 15, 20, 25, 50];
+  const pageArray = Array.from(
+    { length: pagination?.totalPages! },
+    (_, i) => i + 1,
+  );
 
   const handleSearch = (search: string, category: string) => {
     setSearchHook(search);
@@ -120,10 +124,38 @@ const ExpensesPage = () => {
       <CardFooter className="shrink-0">
         <Pagination>
           <PaginationContent>
-            <PaginationItem>
+            {/* <PaginationItem>
               <Badge variant="outline" className="p-4">
                 {pagination?.page}/{pagination?.totalPages}
               </Badge>
+            </PaginationItem> */}
+            <PaginationItem>
+              <Select
+                aria-label="row size selection"
+                id="expense-category"
+                placeholder={`${pagination?.page ? pagination.page : 0}/${pagination?.totalPages ? pagination.totalPages : 0}`}
+                className="w-full"
+                value={pageSize}
+                onChange={(value) => {
+                  if (typeof value === "number") {
+                    setPage(value);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-full bg-background text-foreground border-input">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>select page</SelectLabel>
+                    {pageArray.map((item) => (
+                      <SelectItem key={item} id={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </PaginationItem>
             <PaginationItem>
               <PaginationPrevious
