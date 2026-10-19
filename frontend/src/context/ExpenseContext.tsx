@@ -65,7 +65,7 @@ export function ExpenseProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(true);
       const data = await loginApi(email, password);
 
-      console.log(data);
+      // console.log(data);
 
       localStorage.setItem("expense-user", JSON.stringify(data.data));
       localStorage.setItem("expense-token", data.token);

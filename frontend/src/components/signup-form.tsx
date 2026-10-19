@@ -42,7 +42,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       confirmPass: confirmPass.trim(),
     };
 
-    console.log("signup data: ", data);
+    // console.log("signup data: ", data);
 
     if (password.trim()) {
       if (password.trim().length < 8) {
@@ -57,13 +57,9 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     }
 
     try {
-      console.log("above register");
-
       await register(data.name, data.email, data.confirmPass);
-      console.log("below register");
 
       navigate("/");
-      console.log("naviage below");
     } catch (error) {
       console.log(error);
     }

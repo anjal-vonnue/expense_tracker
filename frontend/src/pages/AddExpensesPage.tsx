@@ -64,7 +64,7 @@ const AddExpensesPage = () => {
       expenseDate: date?.toString()!,
     };
 
-    console.log("expense:", expense);
+    // console.log("expense:", expense);
 
     try {
       await createExpense(expense);

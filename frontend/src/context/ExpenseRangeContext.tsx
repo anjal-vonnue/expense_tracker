@@ -193,8 +193,8 @@ export function ExpenseRangeProvider({
     preExpenses.length,
   );
 
-  console.log("PRE TOTAL: ", preTotal);
-  console.log("PRE LENGTH: ", preExpenses.length);
+  // console.log("PRE TOTAL: ", preTotal);
+  // console.log("PRE LENGTH: ", preExpenses.length);
 
   return (
     <ExpenseRangeContext.Provider

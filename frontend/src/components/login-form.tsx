@@ -40,12 +40,12 @@ export function LoginForm({
       password: password.trim(),
     };
 
-    console.log("loginData: ", data);
+    // console.log("loginData: ", data);
 
     try {
       await login(data.email, data.password);
       navigate("/");
-      console.log("naviage below");
+      // console.log("naviage below");
     } catch (error) {
       console.log(error);
     }

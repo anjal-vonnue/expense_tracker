@@ -12,7 +12,7 @@ export default function useEdit() {
   const editExpense = async (id: number, editData: Partial<ExpenseType>) => {
     setError(null);
     setIsPending(true);
-    console.log(editData);
+    // console.log(editData);
 
     try {
       const response = await fetch(

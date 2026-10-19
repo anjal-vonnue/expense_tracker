@@ -45,7 +45,7 @@ const DeleteDialog = ({
             <Button
               type="submit"
               onClick={async () => {
-                console.log("DELETED ID: ", expenseId);
+                // console.log("DELETED ID: ", expenseId);
                 await deleteExpense(expenseId);
                 retry();
                 contextRetry();
