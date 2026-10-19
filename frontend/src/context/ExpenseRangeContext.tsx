@@ -95,7 +95,9 @@ export function ExpenseRangeProvider({
           setError(new Error("failed to fetch expenses in that range"));
         }
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     };
 
