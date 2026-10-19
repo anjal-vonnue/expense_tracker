@@ -41,9 +41,14 @@ export async function getExpenses(query: querySchemaType, userId: number) {
     where,
     skip,
     take: query.pageSize,
-    orderBy: {
-      expenseDate: "desc",
-    },
+    orderBy: [
+      {
+        expenseDate: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
   });
 
   const pagination = {
