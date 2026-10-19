@@ -1,6 +1,6 @@
 import ExpenseRow from "@/components/ExpenseRow";
 import ExpenseSearch from "@/components/ExpenseSearch";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
