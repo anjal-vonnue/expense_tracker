@@ -1,5 +1,6 @@
 import { useExpense } from "@/context/ExpenseContext";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export type ExpenseType = {
   id: number;
@@ -20,24 +21,29 @@ type PaginationType = {
   totalPages: number;
 };
 
+type ExpenseResponse = {
+  data: ExpenseType[];
+  pagination: PaginationType;
+};
+
 export default function useGetExpenses() {
-  const [expenses, setExpenses] = useState<ExpenseType[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
   const { token } = useExpense();
-  const [pageSize, setPageSize] = useState<number>(13);
-  const [page, setPage] = useState<number>(1);
-  const [search, setSearch] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [pagination, setPagination] = useState<PaginationType | null>(null);
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const [pageSize, setPageSize] = useState(13);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
 
-    const fetchRecent = async () => {
-      setIsLoading(true);
-      setError(null);
+  const expensesQuery = useQuery({
+    queryKey: [
+      "expenses",
+      token,
+      { page, pageSize, search: search.trim(), category: category.trim() },
+    ],
+    queryFn: async ({ signal }): Promise<ExpenseResponse> => {
+      if (!token) {
+        throw new Error("authenticatoin token is missing");
+      }
 
       const params = new URLSearchParams({
         page: String(page),
@@ -45,71 +51,61 @@ export default function useGetExpenses() {
       });
 
       if (search.trim()) {
-        params.set("search", search);
+        params.set("search", search.trim());
       }
 
       if (category.trim()) {
-        params.set("category", category);
+        params.set("category", category.trim());
       }
 
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/expenses?${params}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            signal: controller.signal,
+      console.log("Token exists:", !!token);
+      console.log("Token type:", typeof token);
+      console.log("Token parts:", token?.split(".").length);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/expenses?${params}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+          signal,
+        },
+      );
 
-        if (!response.ok) {
-          throw new Error("failed to fetch recent expenses");
-        }
-
-        const result = await response.json();
-
-        setExpenses(result.data);
-        setPagination(result.pagination);
-        // console.log("Result: ", result.data);
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") {
-          return;
-        }
-
-        if (error instanceof Error) {
-          setError(error);
-        } else {
-          setError(new Error("failed to fetch recent expenses"));
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setIsLoading(false);
-        }
+      if (!response.ok) {
+        throw new Error("failed to fetch recent expenses");
       }
-    };
-    fetchRecent();
 
-    return () => {
-      controller.abort();
-    };
-  }, [retryCount, token, page, pageSize, search, category]);
+      return response.json();
+    },
 
-  const retry = () => {
-    setRetryCount((prev) => prev + 1);
-  };
+    enabled: Boolean(token),
+    staleTime: 30_000,
+  });
 
   return {
-    expenses,
-    isLoading,
-    error,
+    expenses: expensesQuery.data?.data ?? [],
+    pagination: expensesQuery.data?.pagination ?? null,
+
+    isLoading: expensesQuery.isLoading,
+    isFetching: expensesQuery.isFetching,
+    error: expensesQuery.error,
+
     page,
-    pagination,
     pageSize,
     setPage,
-    setCategory,
-    setSearch,
-    retry,
     setPageSize,
+
+    setCategory: (value: string) => {
+      setCategory(value);
+      setPage(1);
+    },
+
+    setSearch: (value: string) => {
+      setSearch(value);
+      setPage(1);
+    },
+
+    retry: () => expensesQuery.refetch(),
   };
 }
