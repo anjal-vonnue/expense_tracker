@@ -1,19 +1,20 @@
-import { useState } from "react";
-import { type ExpenseType } from "./useRecent";
 import { useExpense } from "@/context/ExpenseContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { ExpenseType } from "./useRecent";
+
+type DeleteExpenseResponse = {
+  data: ExpenseType;
+};
 
 export default function useDelete() {
-  const [isPending, setIsPending] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<ExpenseType | null>(null);
-
   const { token } = useExpense();
+  const queryClient = useQueryClient();
 
-  const deleteExpense = async (id: number) => {
-    setError(null);
-    setIsPending(true);
-
-    try {
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number): Promise<DeleteExpenseResponse> => {
+      if (!token) {
+        throw new Error("authentication token is missing");
+      }
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/expenses/${id}`,
 
@@ -29,19 +30,21 @@ export default function useDelete() {
         throw new Error("failed to delete expense");
       }
 
-      const result = await response.json();
+      return response.json();
+    },
 
-      setData(result.data);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("failed to fetch recent expenses");
-      }
-    } finally {
-      setIsPending(false);
-    }
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["expenses"],
+      });
+    },
+  });
+
+  return {
+    deleteExpense: deleteMutation.mutateAsync,
+    isPending: deleteMutation.isPending,
+    error: deleteMutation.error?.message ?? null,
+    data: deleteMutation.data?.data ?? null,
+    reset: deleteMutation.reset,
   };
-
-  return { isPending, error, data, deleteExpense };
 }
