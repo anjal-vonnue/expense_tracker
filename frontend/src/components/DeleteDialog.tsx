@@ -14,15 +14,10 @@ import useDelete from "@/hooks/useDelete";
 
 type DeleteDialogProps = {
   expenseId: number;
-  retry: () => void;
   contextRetry: () => void;
 };
 
-const DeleteDialog = ({
-  expenseId,
-  retry,
-  contextRetry,
-}: DeleteDialogProps) => {
+const DeleteDialog = ({ expenseId, contextRetry }: DeleteDialogProps) => {
   const { deleteExpense, isPending } = useDelete();
 
   return (
@@ -47,7 +42,6 @@ const DeleteDialog = ({
               onClick={async () => {
                 // console.log("DELETED ID: ", expenseId);
                 await deleteExpense(expenseId);
-                retry();
                 contextRetry();
               }}
               variant={"destructive"}

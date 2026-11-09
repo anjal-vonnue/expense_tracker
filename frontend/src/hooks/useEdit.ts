@@ -1,23 +1,29 @@
-import { useState } from "react";
-import { type ExpenseType } from "./useRecent";
 import { useExpense } from "@/context/ExpenseContext";
+import type { ExpenseType } from "./useRecent";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+type EditExpenseResponse = {
+  data: ExpenseType;
+};
 
 export default function useEdit() {
-  const [isPending, setIsPending] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<ExpenseType | null>(null);
-
   const { token } = useExpense();
+  const queryClient = useQueryClient();
 
-  const editExpense = async (id: number, editData: Partial<ExpenseType>) => {
-    setError(null);
-    setIsPending(true);
-    // console.log(editData);
+  const editMutation = useMutation({
+    mutationFn: async ({
+      id,
+      editData,
+    }: {
+      id: number;
+      editData: Partial<ExpenseType>;
+    }): Promise<EditExpenseResponse> => {
+      if (!token) {
+        throw new Error("authentication token is missing");
+      }
 
-    try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/expenses/${id}`,
-
         {
           method: "PATCH",
           headers: {
@@ -32,19 +38,21 @@ export default function useEdit() {
         throw new Error("failed to delete expense");
       }
 
-      const result = await response.json();
-      console.log(result);
-      setData(result.data);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("failed to fetch recent expenses");
-      }
-    } finally {
-      setIsPending(false);
-    }
-  };
+      return response.json();
+    },
 
-  return { isPending, error, data, editExpense };
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["expenses"],
+      });
+    },
+  });
+
+  return {
+    editExpense: editMutation.mutateAsync,
+    isPending: editMutation.isPending,
+    error: editMutation.error?.message ?? null,
+    data: editMutation.data?.data ?? null,
+    reset: editMutation.reset,
+  };
 }

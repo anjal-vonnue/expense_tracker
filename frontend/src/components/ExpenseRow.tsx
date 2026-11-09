@@ -7,11 +7,11 @@ import DeleteDialog from "./DeleteDialog";
 
 const ExpenseRow = memo(function ExpenseRow({
   expense,
-  retry,
+
   contextRetry,
 }: {
   expense: ExpenseType;
-  retry: () => void;
+
   contextRetry: () => void;
 }) {
   return (
@@ -38,15 +38,10 @@ const ExpenseRow = memo(function ExpenseRow({
           category={expense.category}
           amount={Number(expense.amount)}
           date={expense.expenseDate.split("T")[0]}
-          retry={retry}
           contextRetry={contextRetry}
         />
 
-        <DeleteDialog
-          expenseId={expense.id}
-          retry={retry}
-          contextRetry={contextRetry}
-        />
+        <DeleteDialog expenseId={expense.id} contextRetry={contextRetry} />
       </TableCell>
     </TableRow>
   );

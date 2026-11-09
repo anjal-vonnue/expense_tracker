@@ -111,7 +111,6 @@ const ExpensesPage = () => {
                     <ExpenseRow
                       key={expense.id}
                       expense={expense}
-                      retry={retry}
                       contextRetry={contextRetry}
                     />
                   ))}

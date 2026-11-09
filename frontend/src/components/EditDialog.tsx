@@ -38,7 +38,6 @@ type EditDialogProps = {
   category: string;
   amount: number;
   date: string;
-  retry: () => void;
   contextRetry: () => void;
 };
 
@@ -48,13 +47,13 @@ const EditDialog = ({
   category,
   amount,
   date,
-  retry,
   contextRetry,
 }: EditDialogProps) => {
   const [editTitle, setEditTitle] = useState<string>(title);
   const [editCategory, setEditCategory] = useState<string>(category);
   const [editAmount, setEditAmount] = useState<number>(amount);
   const [editDate, setEditDate] = useState<CalendarDate>(parseDate(date));
+  const [isOpen, setIsOpen] = useState(false);
 
   const { editExpense, isPending } = useEdit();
 
@@ -86,14 +85,17 @@ const EditDialog = ({
       }),
     };
 
-    await editExpense(id, editData);
-    retry();
+    await editExpense({ id, editData });
     contextRetry();
+
+    setIsOpen(false);
   };
 
   return (
     <DialogTrigger
+      isOpen={isOpen}
       onOpenChange={(open) => {
+        setIsOpen(open);
         if (open) {
           resetForm();
         }
